@@ -5,7 +5,7 @@
  * @copyright Copyright (C) 2010 - 2014 ecloud solutions ®
  */
 ?>
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/Andreani/wsseAuth.php';
+<?php require_once Mage::getBaseDir('lib') . '/Andreani/wsseAuth.php';
 class Ecloud_Andreani_Helper_Data extends Mage_Core_Helper_Abstract
 {
 	public function getTrackingpopup($tracking) {

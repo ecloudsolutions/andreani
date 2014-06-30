@@ -6,7 +6,7 @@
  */
 ?>
 
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/Andreani/wsseAuth.php';
+<?php require_once Mage::getBaseDir('lib') . '/Andreani/wsseAuth.php';
 class Ecloud_Andreani_Model_Observer extends Mage_Core_Model_Session_Abstract {
 
 	/**

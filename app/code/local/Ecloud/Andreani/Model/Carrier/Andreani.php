@@ -5,8 +5,11 @@
  * @copyright Copyright (C) 2010 - 2014 ecloud solutions ®
  */
 ?>
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/Andreani/wsseAuth.php';
+<?php require_once Mage::getBaseDir('lib') . '/Andreani/wsseAuth.php';
     class Ecloud_Andreani_Model_Carrier_Andreani extends Mage_Shipping_Model_Carrier_Abstract implements Mage_Shipping_Model_Carrier_Interface {  
+        
+        //Activamos el almacenamiento en búfer de la salida
+        //ob_start();
 
         protected $_code = '';
         protected $distancia_final_txt  = '';
@@ -27,6 +30,8 @@
             $datos["volumen"]           = 0;
             $datos["DetalleProductos"]  = "";
             Mage::getSingleton('core/session')->unsAndreani();
+            // Reiniciar variable Sucursales si cambio la dirección, ciudad, provincia o cp.
+            //Mage::getSingleton('core/session')->unsSucursales();
 
             foreach ($request->getAllItems() as $_item) {
                 // Tomamos el attr "medida" segun la configuracion del cliente
@@ -94,6 +99,8 @@
         * @return Los datos para armar el Método de envío $rate 
         */  
         protected function _getAndreaniEstandar($datos){
+            Mage::log("Andreani Estandar");
+
             $rate = Mage::getModel('shipping/rate_result_method');
             /* @var $rate Mage_Shipping_Model_Rate_Result_Method */
             $rate->setCarrier($this->_code);
@@ -111,7 +118,7 @@
             }
 
             // Buscamos la sucursal mas cercana del cliente segun el CP ingresado
-            $sucursales             = $this->consultarSucursales($datos);       
+            $sucursales             = $this->consultarSucursales($datos,"estandar");       
             $datos["sucursalRetiro"]= $sucursales->Sucursal;
             $datos["DireccionSucursal"]     = $sucursales->Direccion;
 
@@ -143,6 +150,8 @@
         * @return Los datos para armar el Método de envío $rate 
         */ 
         protected function _getAndreaniUrgente($datos){
+            Mage::log("Andreani Urgente");
+
             $rate = Mage::getModel('shipping/rate_result_method');
             /* @var $rate Mage_Shipping_Model_Rate_Result_Method */
             $rate->setCarrier($this->_code);
@@ -160,7 +169,7 @@
             }
 
             // Buscamos la sucursal mas cercana del cliente segun el CP ingresado
-            $sucursales             = $this->consultarSucursales($datos);            
+            $sucursales             = $this->consultarSucursales($datos,"urgente");            
             $datos["sucursalRetiro"]= $sucursales->Sucursal;
             $datos["DireccionSucursal"]     = $sucursales->Direccion;
 
@@ -170,8 +179,6 @@
             $datos["CategoriaPeso"]         = $this->envio->CategoriaPeso;
 
             Mage::getSingleton('core/session')->setAndreani($datos);
-
-         
 
             if ($datos["precio"] == 0) {
                 $texto  = "Error en la conexión con eAndreani. Por favor chequear los datos ingresados en la información de envio.";
@@ -193,6 +200,8 @@
         * @return Los datos para armar el Método de envío $rate 
         */  
         protected function _getAndreaniSucursal($datos){
+            Mage::log("Andreani Sucursal");
+
             $rate = Mage::getModel('shipping/rate_result_method');
             /* @var $rate Mage_Shipping_Model_Rate_Result_Method */
             $rate->setCarrier($this->_code);
@@ -210,7 +219,7 @@
             }
 
             // Buscamos la sucursal mas cercana del cliente segun el CP ingresado
-            $sucursales             = $this->consultarSucursales($datos);            
+            $sucursales             = $this->consultarSucursales($datos,"sucursal");            
             $datos["sucursalRetiro"]= $sucursales->Sucursal;
             $datos["DireccionSucursal"]     = $sucursales->Direccion;
 
@@ -295,8 +304,26 @@
          * @param $params 
          * @return $costoEnvio
          */
-        public function consultarSucursales($params) {
+        public function consultarSucursales($params,$metodo) {
             try {
+                // Nos fijamos si ya consultamos la sucursal en Andreani
+                if(is_object(Mage::getSingleton('core/session')->getSucursales())) {
+                    if($metodo != "sucursal") {
+                        Mage::log("Ya buscó la sucursal en Andreani");
+                        return Mage::getSingleton('core/session')->getSucursales();
+                    } else {
+                        //Mage::getSingleton('core/session')->unsGoogleDistance();
+                        Mage::log("Google Distance: " . print_r(Mage::getSingleton('core/session')->getGoogleDistance(),true));
+                        if(is_object(Mage::getSingleton('core/session')->getGoogleDistance())) {
+                            Mage::log("Ya buscó la sucursal en Google Maps");
+                            $this->distancia_final_txt = Mage::getSingleton('core/session')->getDistancia();
+                            $this->duracion_final      = Mage::getSingleton('core/session')->getDuracion();
+                            $this->mode                = Mage::getSingleton('core/session')->getMode();
+
+                            return Mage::getSingleton('core/session')->getGoogleDistance();
+                        }
+                    }
+                }
 
                 $options = array(
                     'soap_version' => SOAP_1_2,
@@ -384,6 +411,7 @@
                 }
                 
                 Mage::log("Sucursal: " . print_r($sucursales, true));
+                Mage::getSingleton('core/session')->setSucursales($sucursales);
 
                 return $sucursales;
 
@@ -461,6 +489,11 @@
                 $this->duracion_final        = $duracion_final;
                 if($mode=="driving") $this->mode="en auto";
 
+                // Guardamos las variables en session para no tener que volver a llamar a la API de Google
+                Mage::getSingleton('core/session')->setGoogleDistance($sucursales[$posicion]);
+                Mage::getSingleton('core/session')->setDistancia($distancia_final_txt);
+                Mage::getSingleton('core/session')->setDuracion($duracion_final);
+                Mage::getSingleton('core/session')->setMode($this->mode);
                 return $sucursales[$posicion];
 
             } catch (SoapFault $e) {
