@@ -1,0 +1,348 @@
+<?xml version="1.0"?>
+<config>
+	  <sections>
+		<carriers  translate="label" module="andreani">
+            <label>Shipping Methods</label>
+            <tab>sales</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>330</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>          
+            <groups>
+                <andreaniconfig translate="label"> 
+                    <label>Configuración Andreani</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>5</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <model>andreani/carrier_andreani</model>
+                    <comment><![CDATA[Contactate con un representante <strong>Andreani</strong> para obtener tus datos de cliente y empezar a utilizar nuestros servicios!<br /><a href="http://www.andreani.com/Contacts" target="_blank">www.andreani.com</a>]]></comment>
+                    <fields>                        
+                        <usuario translate="label">
+                            <label>Nombre de Usuario: </label>
+                            <default></default>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>40</sort_order>
+                        </usuario>           
+                        <password translate="label">
+                            <label>Contraseña:</label>
+                            <default></default>
+                            <frontend_type>password</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>45</sort_order>
+                        </password> 
+                        <nrocliente translate="label">
+                            <label>Numero de Cliente:</label>
+                            <default></default>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>50</sort_order>
+                        </nrocliente>
+                        <medida translate="label">
+                            <label>Unidad de medida:</label>
+                            <default></default>
+                            <frontend_type>select</frontend_type>
+                            <frontend_model>andreani/adminhtml_config_form_field_medida</frontend_model>
+                            <source_model>andreani/config_medida</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>60</sort_order>
+                        </medida>
+                        <testmode translate="label">
+                           <label>Test Mode:</label>
+                           <frontend_type>select</frontend_type>
+                           <source_model>andreani/config_TestMode</source_model>
+                           <sort_order>20</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                        </testmode>
+                    </fields>
+                </andreaniconfig>
+                <andreanisucursal translate="label"> 
+                    <label>Andreani Sucursal</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <model>andreani/carrier_andreani</model>
+                    <fields>                        
+                        <active translate="label">
+                            <label>Habilitado</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>10</sort_order>
+                        </active>
+                        <title translate="label">
+                            <label>Titulo</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>20</sort_order>
+                        </title>
+                        <description translate="label">
+                            <label>Descripción</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>25</sort_order>
+                        </description>
+                        <sallowspecific translate="label">
+                            <label><![CDATA[Env&iacute;o a pa&iacute;ses]]></label>
+                            <frontend_type>select</frontend_type>
+                            <frontend_class>shipping-applicable-country</frontend_class>
+                            <source_model>adminhtml/system_config_source_shipping_allspecificcountries</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <sort_order>30</sort_order>
+                        </sallowspecific>
+                        <specificcountry translate="label">
+                            <label><![CDATA[Pa&iacute;ses de env&iacute;o]]></label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                            <sort_order>35</sort_order>
+                        </specificcountry>
+                        <contrato translate="label">
+                            <label>Contrato:</label>
+                            <default></default>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>55</sort_order>
+                        </contrato>
+                        <gestioncobranza translate="label">
+                            <label>Contrareembolso Andreani:</label>
+                            <comment>
+                            <![CDATA[Habilitar o deshabilitar el servicio. <br> <span class="notice">Tu cliente podra pagar todo en su destino!</span>]]>
+                            </comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>85</sort_order>
+                        </gestioncobranza>
+                        <gccontrato translate="label">
+                            <label>Contrato Contrareembolso:</label>
+                            <default></default>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>90</sort_order>
+                        </gccontrato>
+                    </fields>
+                </andreanisucursal>
+                <andreaniurgente translate="label"> 
+                    <label>Andreani Urgente</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <model>andreani/carrier_andreani</model>
+                    <fields>                        
+                        <active translate="label">
+                            <label>Habilitado</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>11</sort_order>
+                        </active>
+                        <title translate="label">
+                            <label>Titulo</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>20</sort_order>
+                        </title>
+                        <description translate="label">
+                            <label>Descripción</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>25</sort_order>
+                        </description>
+                        <sallowspecific translate="label">
+                            <label><![CDATA[Env&iacute;o a pa&iacute;ses]]></label>
+                            <frontend_type>select</frontend_type>
+                            <frontend_class>shipping-applicable-country</frontend_class>
+                            <source_model>adminhtml/system_config_source_shipping_allspecificcountries</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <sort_order>30</sort_order>
+                        </sallowspecific>
+                        <specificcountry translate="label">
+                            <label><![CDATA[Pa&iacute;ses de env&iacute;o]]></label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                            <sort_order>35</sort_order>
+                        </specificcountry>
+                        <contrato translate="label">
+                            <label>Contrato:</label>
+                            <default></default>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>55</sort_order>
+                        </contrato>
+                        <gestioncobranza translate="label">
+                            <label>Contrareembolso Andreani:</label>
+                            <comment>
+                            <![CDATA[Habilitar o deshabilitar el servicio. <br> <span class="notice">Tu cliente podra pagar todo en su destino!</span>]]>
+                            </comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>85</sort_order>
+                        </gestioncobranza>
+                        <gccontrato translate="label">
+                            <label>Contrato Contrareembolso:</label>
+                            <default></default>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>90</sort_order>
+                        </gccontrato>              
+                    </fields>
+                </andreaniurgente>
+                <andreaniestandar translate="label"> 
+                    <label>Andreani Estandar</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <model>andreani/carrier_andreani</model>
+                    <fields>                        
+                        <active translate="label">
+                            <label>Habilitado</label>
+                            <comment>
+                            <![CDATA[Habilitar o deshabilitar el servicio. <br> <span class="notice">Ojo! tu cliente no va a poder recibir el pedido en su casa si no lo tenes habilitado.</span>]]>
+                            </comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>10</sort_order>
+                        </active>
+                        <title translate="label">
+                            <label>Titulo</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>20</sort_order>
+                        </title>
+                        <description translate="label">
+                            <label>Descripción</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>25</sort_order>
+                        </description>
+                        <sallowspecific translate="label">
+                            <label><![CDATA[Env&iacute;o a pa&iacute;ses]]></label>
+                            <frontend_type>select</frontend_type>
+                            <frontend_class>shipping-applicable-country</frontend_class>
+                            <source_model>adminhtml/system_config_source_shipping_allspecificcountries</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <sort_order>30</sort_order>
+                        </sallowspecific>
+                        <specificcountry translate="label">
+                            <label><![CDATA[Pa&iacute;ses de env&iacute;o]]></label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                            <sort_order>35</sort_order>
+                        </specificcountry>
+                        <contrato translate="label">
+                            <label>Contrato:</label>
+                            <default></default>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>55</sort_order>
+                        </contrato>
+                        <gestioncobranza translate="label">
+                            <label>Contrareembolso Andreani:</label>
+                            <comment>
+                            <![CDATA[Habilitar o deshabilitar el servicio. <br> <span class="notice">Tu cliente podra pagar todo en su destino!</span>]]>
+                            </comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>85</sort_order>
+                        </gestioncobranza>
+                        <gccontrato translate="label">
+                            <label>Contrato Contrareembolso:</label>
+                            <default></default>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>90</sort_order>
+                        </gccontrato>
+                    </fields>
+                </andreaniestandar>
+            </groups>
+		</carriers>
+	  </sections>
+</config>

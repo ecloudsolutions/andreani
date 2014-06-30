@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <andreani translate="title" module="andreani">
+            <sort_order>10</sort_order>
+            <title>Estado de pedidos</title>
+            <action>adminhtml/pedidos/</action>
+        </andreani>
+    </menu>
+</config>
