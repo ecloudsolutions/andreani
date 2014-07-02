@@ -5,7 +5,6 @@
  * @copyright Copyright (C) 2010 - 2014 ecloud solutions ®
  */
 ?>
-
 <?php require_once Mage::getBaseDir('lib') . '/Andreani/wsseAuth.php';
 class Ecloud_Andreani_Model_Observer extends Mage_Core_Model_Session_Abstract {
 
@@ -110,6 +109,10 @@ class Ecloud_Andreani_Model_Observer extends Mage_Core_Model_Session_Abstract {
             $client         = new SoapClient($datos["urlConfirmar"], $options);
             $client->__setSoapHeaders(array($wsse_header));
 
+			if (strlen($datos["detalle_productos"]) >= 90){
+				$datos["detalle_productos"] = substr($datos["detalle_productos"],0,80) . "...";
+			}
+
 			$phpresponse = $client->ConfirmarCompra(array(
 				'compra' =>array(
 						'Calle'					=> $datos["direccion"],
@@ -150,8 +153,6 @@ class Ecloud_Andreani_Model_Observer extends Mage_Core_Model_Session_Abstract {
 			    ->setTitle('Andreani');
 			$shipment->addTrack($track);
 
-			
-	
 			//Enviamos numero Andreani, nos devolvera el url de la constancia que lo almacenaremos en la tabla andreani_order.
 			$NroAndreani = $phpresponse->ConfirmarCompraResult->NumeroAndreani;
 			$constanciaResponse = $client->ImprimirConstancia(array(
@@ -160,7 +161,7 @@ class Ecloud_Andreani_Model_Observer extends Mage_Core_Model_Session_Abstract {
 										'NumeroAndreani' => $NroAndreani
 									))));
 			$ConstanciaURL = $constanciaResponse->ImprimirConstanciaResult->ResultadoImprimirConstancia->PdfLinkFile;
-			mage::log("Constancia de entrega URL " . print_r($ConstanciaURL,true));
+			Mage::log("Constancia de entrega URL " . print_r($ConstanciaURL,true));
 
 			$id = intval($datos["id"]);
 			Mage::getModel('andreani/order')->load($id)->setData('cod_tracking',$phpresponse->ConfirmarCompraResult->NumeroAndreani)->save();

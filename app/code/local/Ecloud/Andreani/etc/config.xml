@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Ecloud_Andreani>
-			<version>0.1.5</version>
+			<version>0.1.6</version>
 		</Ecloud_Andreani>
 	</modules>
 	<global>
