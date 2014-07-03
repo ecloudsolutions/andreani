@@ -1,11 +1,10 @@
 <?php
 /**
- * @version   1.0 20.02.2014
+ * @version   0.1.7 03.07.2014
  * @author    ecloud solutions http://www.ecloudsolutions.com <info@ecloudsolutions.com>
  * @copyright Copyright (C) 2010 - 2014 ecloud solutions ®
  */
-?>
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/Andreani/wsseAuth.php';
+?><?php require_once Mage::getBaseDir('lib') . '/Andreani/wsseAuth.php';
 class Ecloud_Andreani_Adminhtml_PedidosController extends Mage_Adminhtml_Controller_Action
 {
 

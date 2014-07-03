@@ -4,8 +4,7 @@
  * @author    ecloud solutions http://www.ecloudsolutions.com <info@ecloudsolutions.com>
  * @copyright Copyright (C) 2010 - 2014 ecloud solutions ®
  */
-?>
-<?php require_once Mage::getBaseDir('lib') . '/Andreani/wsseAuth.php';
+?><?php require_once Mage::getBaseDir('lib') . '/Andreani/wsseAuth.php';
     class Ecloud_Andreani_Model_Carrier_Andreani extends Mage_Shipping_Model_Carrier_Abstract implements Mage_Shipping_Model_Carrier_Interface {  
         
         //Activamos el almacenamiento en búfer de la salida
