@@ -19,15 +19,39 @@
                     <show_in_store>1</show_in_store>
                     <model>andreani/carrier_andreani</model>
                     <comment><![CDATA[Contactate con un representante <strong>Andreani</strong> para obtener tus datos de cliente y empezar a utilizar nuestros servicios!<br /><a href="http://www.andreani.com/Contacts" target="_blank">www.andreani.com</a>]]></comment>
-                    <fields>                        
+                    <fields>
+                        <testmode translate="label">
+                           <label>Modo Testeo:</label>
+                           <comment>
+                            <![CDATA[Habilitar o deshabilitar el modo testeo para probarlo en distintos entornos.]]>
+                           </comment>
+                           <frontend_type>select</frontend_type>
+                           <source_model>andreani/config_TestMode</source_model>
+                           <sort_order>10</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                        </testmode>
+                        <cache translate="label">
+                           <label>Cache:</label>
+                           <comment>
+                            <![CDATA[Optimiza las llamadas a las Sucursales y la distancia entre la sucursal y el cliente con Google Maps.]]>
+                           </comment>
+                           <frontend_type>select</frontend_type>
+                           <source_model>adminhtml/system_config_source_yesno</source_model>
+                           <sort_order>20</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                        </cache>                     
                         <usuario translate="label">
                             <label>Nombre de Usuario: </label>
                             <default></default>
+                            <sort_order>30</sort_order>
                             <frontend_type>text</frontend_type>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <sort_order>40</sort_order>
                         </usuario>           
                         <password translate="label">
                             <label>Contraseña:</label>
@@ -36,7 +60,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <sort_order>45</sort_order>
+                            <sort_order>40</sort_order>
                         </password> 
                         <nrocliente translate="label">
                             <label>Numero de Cliente:</label>
@@ -58,15 +82,6 @@
                             <show_in_store>1</show_in_store>
                             <sort_order>60</sort_order>
                         </medida>
-                        <testmode translate="label">
-                           <label>Test Mode:</label>
-                           <frontend_type>select</frontend_type>
-                           <source_model>andreani/config_TestMode</source_model>
-                           <sort_order>20</sort_order>
-                           <show_in_default>1</show_in_default>
-                           <show_in_website>1</show_in_website>
-                           <show_in_store>1</show_in_store>
-                        </testmode>
                     </fields>
                 </andreaniconfig>
                 <andreanisucursal translate="label"> 

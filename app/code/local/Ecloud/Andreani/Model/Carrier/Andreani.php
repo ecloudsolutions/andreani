@@ -1,6 +1,6 @@
 <?php
 /**
- * @version   0.1.6 20.02.2014
+ * @version   0.1.8 04.07.2014
  * @author    ecloud solutions http://www.ecloudsolutions.com <info@ecloudsolutions.com>
  * @copyright Copyright (C) 2010 - 2014 ecloud solutions ®
  */
@@ -29,8 +29,11 @@
             $datos["volumen"]           = 0;
             $datos["DetalleProductos"]  = "";
             Mage::getSingleton('core/session')->unsAndreani();
-            // Reiniciar variable Sucursales si cambio la dirección, ciudad, provincia o cp.
-            //Mage::getSingleton('core/session')->unsSucursales();
+
+            // Reiniciar variable Sucursales para descachear las Sucursales.
+            if(!Mage::getStoreConfig('carriers/andreaniconfig/cache',Mage::app()->getStore())) {
+                Mage::getSingleton('core/session')->unsSucursales();
+            }
 
             foreach ($request->getAllItems() as $_item) {
                 // Tomamos el attr "medida" segun la configuracion del cliente
