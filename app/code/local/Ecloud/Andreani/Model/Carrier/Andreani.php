@@ -28,6 +28,8 @@
             $datos["valorDeclarado"]    = 0;
             $datos["volumen"]           = 0;
             $datos["DetalleProductos"]  = "";
+            $sku                        = "";
+            $freeBoxes                  = 0;
             Mage::getSingleton('core/session')->unsAndreani();
 
             // Reiniciar variable Sucursales para descachear las Sucursales.
@@ -35,30 +37,47 @@
                 Mage::getSingleton('core/session')->unsSucursales();
             }
 
-            foreach ($request->getAllItems() as $_item) {
-                // Tomamos el attr "medida" segun la configuracion del cliente
-                if (Mage::getStoreConfig('carriers/andreaniconfig/medida',Mage::app()->getStore())=="") {
-                    $datos["medida"] = "gramos";
-                } else {
-                    $datos["medida"] = Mage::getStoreConfig('carriers/andreaniconfig/medida',Mage::app()->getStore());
-                }
-
-                if ($datos["medida"]=="kilos") {
-                    $datos["medida"] = 1000;
-                } elseif ($datos["medida"]=="gramos") {
-                    $datos["medida"] = 1;
-                } else {
-                    $datos["medida"] = 1; //si está vacio: "gramos"
-                }
-                $datos["peso"]           = ($_item->getQty() * $_item->getWeight() * $datos["medida"]) + $datos["peso"];
-                $datos["valorDeclarado"] = ($_item->getQty() * $_item->getPrice()) + $datos["valorDeclarado"];
-                
-                $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $_item->getSku(), array('volumen'));
-                $datos["volumen"] = ($_item->getQty() * $product->getVolumen() * $datos["medida"]) + $datos["volumen"];
-
-                // Creamos un string con el detalle de cada producto
-                $datos["DetalleProductos"] = "(" . $_item->getQty() . ") " .$_item->getName() . " + " . $datos["DetalleProductos"];
+            // Tomamos el attr "medida" segun la configuracion del cliente
+            if (Mage::getStoreConfig('carriers/andreaniconfig/medida',Mage::app()->getStore())=="") {
+                $datos["medida"] = "gramos";
+            } else {
+                $datos["medida"] = Mage::getStoreConfig('carriers/andreaniconfig/medida',Mage::app()->getStore());
             }
+
+            if ($datos["medida"]=="kilos") {
+                $datos["medida"] = 1000;
+            } elseif ($datos["medida"]=="gramos") {
+                $datos["medida"] = 1;
+            } else {
+                $datos["medida"] = 1; //si está vacio: "gramos"
+            }
+            
+            foreach ($request->getAllItems() as $_item) {
+                if($sku != $_item->getSku()) {
+                    $sku                     = $_item->getSku();
+                    $datos["peso"]           = ($_item->getQty() * $_item->getWeight() * $datos["medida"]) + $datos["peso"];
+                    $datos["valorDeclarado"] = ($_item->getQty() * $_item->getPrice()) + $datos["valorDeclarado"];
+                    
+                    $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $_item->getSku(), array('volumen'));
+                    $datos["volumen"] += ($_item->getQty() * $product->getVolumen() * $datos["medida"]);
+                    
+                    //$datos["volumenstring"] = $_item->getQty() . " x " . $product->getVolumen()  . " x " .  $datos["medida"];
+                    //Mage::log("Volumen String: " . print_r($datos["volumenstring"],true));
+                    //Mage::log("Volumen: " . print_r($datos["volumen"],true));
+
+                    // Creamos un string con el detalle de cada producto
+                    $datos["DetalleProductos"] = "(" . $_item->getQty() . ") " .$_item->getName() . " + " . $datos["DetalleProductos"];
+
+                    // Si la condicion de free shipping está seteada en el producto
+                    if ($_item->getFreeShippingDiscount() && !$_item->getProduct()->isVirtual()) {
+                        Mage::log("getFreeShippingDiscount: " . print_r($_item->getQty(),true));
+                        $freeBoxes += $_item->getQty();
+                    }
+                }
+            }
+
+            // Seteamos las reglas
+            if(isset($freeBoxes))   $this->setFreeBoxes($freeBoxes);
             
             $cart   = Mage::getSingleton('checkout/cart');
             $quote  = $cart->getQuote();
@@ -81,14 +100,43 @@
             $result = Mage::getModel('shipping/rate_result');
             $method = Mage::getModel('shipping/rate_result_method');
 
+            $error_msg = Mage::helper('andreani')->__("Su pedido supera el peso máximo de 35 kg permitido por Andreani. Por favor divida su orden en más pedidos o consulte al administrador de la tienda. Gracias y disculpe las molestias.");
+
             if ($this->_code == "andreaniestandar" & Mage::getStoreConfig('carriers/andreaniestandar/active',Mage::app()->getStore()) == 1) {
-                $result->append($this->_getAndreaniEstandar($datos));
+                // En CASAWS        -> 35 kg
+                if($datos["volumen"] >= 35000){
+                    $error = Mage::getModel('shipping/rate_result_error'); 
+                    $error->setCarrier($this->_code); 
+                    $error->setCarrierTitle($this->getConfigData('title')); 
+                    $error->setErrorMessage($error_msg); 
+                    return $error;
+                } else {
+                    $result->append($this->_getAndreaniEstandar($datos,$request));
+                }
             }
             if ($this->_code == "andreaniurgente" & Mage::getStoreConfig('carriers/andreaniurgente/active',Mage::app()->getStore()) == 1) {
-                $result->append($this->_getAndreaniUrgente($datos));
+                // En CASAWS        -> 35 kg
+                if($datos["volumen"] >= 35000){
+                    $error = Mage::getModel('shipping/rate_result_error'); 
+                    $error->setCarrier($this->_code); 
+                    $error->setCarrierTitle($this->getConfigData('title')); 
+                    $error->setErrorMessage($error_msg); 
+                    return $error;
+                } else {
+                    $result->append($this->_getAndreaniUrgente($datos,$request));
+                }
             }
             if ($this->_code == "andreanisucursal" & Mage::getStoreConfig('carriers/andreanisucursal/active',Mage::app()->getStore()) == 1) {
-                $result->append($this->_getAndreaniSucursal($datos));
+                // En CASAWS        -> 35 kg
+                if($datos["volumen"] >= 35000){
+                    $error = Mage::getModel('shipping/rate_result_error'); 
+                    $error->setCarrier($this->_code); 
+                    $error->setCarrierTitle($this->getConfigData('title')); 
+                    $error->setErrorMessage($error_msg); 
+                    return $error;
+                } else {
+                    $result->append($this->_getAndreaniSucursal($datos,$request));
+                }
             }
  
             return $result;
@@ -100,7 +148,7 @@
         * @param Datos del usuario y el carrito de compras $data 
         * @return Los datos para armar el Método de envío $rate 
         */  
-        protected function _getAndreaniEstandar($datos){
+        protected function _getAndreaniEstandar($datos,$request){
             Mage::log("Andreani Estandar");
 
             $rate = Mage::getModel('shipping/rate_result_method');
@@ -112,11 +160,11 @@
             $datos["contrato"]      = Mage::getStoreConfig('carriers/andreaniestandar/contrato',Mage::app()->getStore());
 
             if (Mage::getStoreConfig('carriers/andreaniconfig/testmode',Mage::app()->getStore()) == 1) {
-                    $datos["urlCotizar"]        = 'https://www.e-andreani.com/CasaStaging/eCommerce/CotizacionEnvio.svc?wsdl';
-                    $datos["urlSucursal"]       = 'https://www.e-andreani.com/CasaStaging/ecommerce/ConsultaSucursales.svc?wsdl';
+                $datos["urlCotizar"]        = 'https://www.e-andreani.com/CasaStaging/eCommerce/CotizacionEnvio.svc?wsdl';
+                $datos["urlSucursal"]       = 'https://www.e-andreani.com/CasaStaging/ecommerce/ConsultaSucursales.svc?wsdl';
             } else {
-                    $datos["urlCotizar"]        = 'https://www.e-andreani.com/CASAWS/eCommerce/CotizacionEnvio.svc?wsdl';
-                    $datos["urlSucursal"]       = 'https://www.e-andreani.com/CASAWS/ecommerce/ConsultaSucursales.svc?wsdl';
+                $datos["urlCotizar"]        = 'https://www.e-andreani.com/CASAWS/eCommerce/CotizacionEnvio.svc?wsdl';
+                $datos["urlSucursal"]       = 'https://www.e-andreani.com/CASAWS/ecommerce/ConsultaSucursales.svc?wsdl';
             }
 
             // Buscamos la sucursal mas cercana del cliente segun el CP ingresado
@@ -138,9 +186,19 @@
             }
 
             $rate->setMethodTitle($texto);
+
+            if($request->getFreeShipping() == true || $request->getPackageQty() == $this->getFreeBoxes()) {
+                $shippingPrice = '0.00';
+                // cambiamos el titulo para indicar que el envio es gratis
+                $rate->setMethodTitle(Mage::helper('andreani')->__('Envío gratis.'));
+            } else { 
+                $shippingPrice = $this->getFinalPriceWithHandlingFee($datos["precio"]);
+            }
+
+            $shippingPrice = $shippingPrice + ($shippingPrice * Mage::getStoreConfig('carriers/andreaniestandar/regla') / 100);
             
-            $rate->setPrice($datos["precio"]);
-            $rate->setCost($datos["precio"]);
+            $rate->setPrice($shippingPrice);
+            $rate->setCost($shippingPrice);
 
             return $rate;
         }
@@ -151,7 +209,7 @@
         * @param Datos del usuario y el carrito de compras $data 
         * @return Los datos para armar el Método de envío $rate 
         */ 
-        protected function _getAndreaniUrgente($datos){
+        protected function _getAndreaniUrgente($datos,$request){
             Mage::log("Andreani Urgente");
 
             $rate = Mage::getModel('shipping/rate_result_method');
@@ -189,8 +247,19 @@
             }
 
             $rate->setMethodTitle($texto); 
-            $rate->setPrice($datos["precio"]);
-            $rate->setCost($datos["precio"]);
+            
+            if($request->getFreeShipping() == true || $request->getPackageQty() == $this->getFreeBoxes()) {
+                $shippingPrice = '0.00';
+                // cambiamos el titulo para indicar que el envio es gratis
+                $rate->setMethodTitle(Mage::helper('andreani')->__('Envío gratis.'));
+            } else { 
+                $shippingPrice = $this->getFinalPriceWithHandlingFee($datos["precio"]);
+            }
+
+            $shippingPrice = $shippingPrice + ($shippingPrice * Mage::getStoreConfig('carriers/andreaniurgente/regla') / 100);
+            
+            $rate->setPrice($shippingPrice);
+            $rate->setCost($shippingPrice);
 
             return $rate;
         }
@@ -201,7 +270,7 @@
         * @param Datos del usuario y el carrito de compras $data 
         * @return Los datos para armar el Método de envío $rate 
         */  
-        protected function _getAndreaniSucursal($datos){
+        protected function _getAndreaniSucursal($datos,$request){
             Mage::log("Andreani Sucursal");
 
             $rate = Mage::getModel('shipping/rate_result_method');
@@ -241,8 +310,18 @@
 
             $rate->setMethodTitle($texto);
             
-            $rate->setPrice($datos["precio"]);
-            $rate->setCost($datos["precio"]);
+            if($request->getFreeShipping() == true || $request->getPackageQty() == $this->getFreeBoxes()) {
+                $shippingPrice = '0.00';
+                // cambiamos el titulo para indicar que el envio es gratis
+                $rate->setMethodTitle(Mage::helper('andreani')->__('Envío gratis.'));
+            } else { 
+                $shippingPrice = $this->getFinalPriceWithHandlingFee($datos["precio"]);
+            }
+
+            $shippingPrice = $shippingPrice + ($shippingPrice * Mage::getStoreConfig('carriers/andreanisucursal/regla') / 100);
+            
+            $rate->setPrice($shippingPrice);
+            $rate->setCost($shippingPrice);
 
             return $rate;
         }

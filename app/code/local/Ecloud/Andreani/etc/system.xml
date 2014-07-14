@@ -87,7 +87,7 @@
                 <andreanisucursal translate="label"> 
                     <label>Andreani Sucursal</label>
                     <frontend_type>text</frontend_type>
-                    <sort_order>10</sort_order>
+                    <sort_order>30</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
@@ -172,12 +172,24 @@
                             <show_in_store>1</show_in_store>
                             <sort_order>90</sort_order>
                         </gccontrato>
+                        <regla translate="label">
+                            <label>Regla de precio (%):</label>
+                            <comment>
+                            <![CDATA[Usar . en valores con decimales<br> <span class="notice">Ejemplo: 0.49 </span>]]>
+                            </comment>
+                            <default>0</default>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>90</sort_order>
+                        </regla>
                     </fields>
                 </andreanisucursal>
                 <andreaniurgente translate="label"> 
                     <label>Andreani Urgente</label>
                     <frontend_type>text</frontend_type>
-                    <sort_order>10</sort_order>
+                    <sort_order>20</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
@@ -261,7 +273,19 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <sort_order>90</sort_order>
-                        </gccontrato>              
+                        </gccontrato>
+                        <regla translate="label">
+                            <label>Regla de precio (%):</label>
+                            <comment>
+                            <![CDATA[Usar . en valores con decimales<br> <span class="notice">Ejemplo: 0.49 </span>]]>
+                            </comment>
+                            <default>0</default>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>90</sort_order>
+                        </regla>         
                     </fields>
                 </andreaniurgente>
                 <andreaniestandar translate="label"> 
@@ -355,6 +379,18 @@
                             <show_in_store>1</show_in_store>
                             <sort_order>90</sort_order>
                         </gccontrato>
+                        <regla translate="label">
+                            <label>Regla de precio (%):</label>
+                            <comment>
+                            <![CDATA[Usar . en valores con decimales<br> <span class="notice">Ejemplo: 0.49 </span>]]>
+                            </comment>
+                            <default>0</default>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>90</sort_order>
+                        </regla>
                     </fields>
                 </andreaniestandar>
             </groups>
