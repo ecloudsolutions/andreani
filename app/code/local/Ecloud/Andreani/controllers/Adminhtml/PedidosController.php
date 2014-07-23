@@ -19,11 +19,12 @@ class Ecloud_Andreani_Adminhtml_PedidosController extends Mage_Adminhtml_Control
 
     public function gridAction()
     {
+		$this->_title($this->__('Andreani'))->_title($this->__('Estado de pedidos'));
         $this->loadLayout();
+        $this->_setActiveMenu('andreani/andreani');
         $this->getResponse()->setBody(
-            $this->getLayout()->createBlock('andreani/adminhtml_andreani_pedidos_grid')->toHtml()
+            $this->getLayout()->createBlock('andreani/adminhtml_pedidos_grid')->toHtml()
         );
-
     }
 
     public function exportEcloudCsvAction()

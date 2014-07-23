@@ -6,9 +6,6 @@
  */
 ?><?php require_once Mage::getBaseDir('lib') . '/Andreani/wsseAuth.php';
     class Ecloud_Andreani_Model_Carrier_Andreani extends Mage_Shipping_Model_Carrier_Abstract implements Mage_Shipping_Model_Carrier_Interface {  
-        
-        //Activamos el almacenamiento en búfer de la salida
-        //ob_start();
 
         protected $_code = '';
         protected $distancia_final_txt  = '';

@@ -1,4 +1,3 @@
-
 <?php
 /**
  * @version   0.1.8 04.07.2014
@@ -9,12 +8,9 @@
 <?php
 class Ecloud_Andreani_Block_Adminhtml_Pedidos_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
- 
 
     public function __construct()
     {
- 
- 
         parent::__construct();
         $this->setId('andreani_order');
         $this->setDefaultSort('id');
@@ -30,7 +26,6 @@ class Ecloud_Andreani_Block_Adminhtml_Pedidos_Grid extends Mage_Adminhtml_Block_
         parent::_prepareCollection();
         return $this;
     }
-
 
     protected function _prepareColumns()
     {
@@ -68,7 +63,7 @@ class Ecloud_Andreani_Block_Adminhtml_Pedidos_Grid extends Mage_Adminhtml_Block_
 
         $this->addColumn('sucursal_retiro', array(
             'header' => Mage::helper('andreani')->__('Sucursal'),
-            'sortable' => true,
+            'sortable' => false,
             'width' => '5',
             'index' => 'sucursal_retiro',
             'type'  => 'text'
@@ -76,7 +71,7 @@ class Ecloud_Andreani_Block_Adminhtml_Pedidos_Grid extends Mage_Adminhtml_Block_
         
         $this->addColumn('detalle_productos', array(
             'header' => Mage::helper('andreani')->__('Descripcion Productos'),
-            'sortable' => true,
+            'sortable' => false,
             'width' => '5',
             'index' => 'detalle_productos',
             'type'  => 'text'
@@ -114,11 +109,10 @@ class Ecloud_Andreani_Block_Adminhtml_Pedidos_Grid extends Mage_Adminhtml_Block_
         ));
 
         $this->addColumn('impresion', array(
-        'header'=> Mage::helper('catalog')->__('Imprimir Constancia'),
-        'target' => '_blank',
-
-        'renderer'  => 'andreani/adminhtml_Pedidos_Edit_Renderer_button'
-
+			'header'=> Mage::helper('catalog')->__('Imprimir Constancia'),
+			'sortable'  => false,
+			'target' => '_blank',
+			'renderer'  => 'andreani/adminhtml_Pedidos_Edit_Renderer_button'
         ));
 
         $this->addColumn('estado', array(
@@ -129,18 +123,6 @@ class Ecloud_Andreani_Block_Adminhtml_Pedidos_Grid extends Mage_Adminhtml_Block_
             'type'      => 'text',
             
         ));
-
-        $this->addColumn('action_edit', array(
-            'header'   => $this->helper('andreani')->__('Action'),
-            'width'    => 15,
-            'sortable' => false,
-            'filter'   => false,
-            'type'     => 'action',
-            'actions'  => array(
-                array(
-                    'caption' => $this->helper('andreani')->__('View'),
-                ))
-            ));
  
         return parent::_prepareColumns();
     }
@@ -177,6 +159,6 @@ class Ecloud_Andreani_Block_Adminhtml_Pedidos_Grid extends Mage_Adminhtml_Block_
     {
         return $this->getUrl('*/*/grid', array('_current'=>true));
     }
-
+	
 }
 ?>

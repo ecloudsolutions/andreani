@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Ecloud_Andreani>
-			<version>0.1.8</version>
+			<version>0.1.9</version>
 		</Ecloud_Andreani>
 	</modules>
 	<global>
@@ -114,17 +114,21 @@
 	</admin>
 	<adminhtml>
         <menu>
-            <andreani translate="title" module="andreani">
-                <title>Andreani</title>
-                <sort_order>91</sort_order>               
+            <sales>
                 <children>
-                    <pedidos translate="title">
-                        <title>Estado de Pedidos</title>
-                        <sort_order>20</sort_order>
-                        <action>adminhtml/pedidos/index</action>
-                    </pedidos>
+                    <andreani translate="title">
+                        <title>Andreani</title>
+                        <sort_order>91</sort_order>               
+                        <children>
+                            <pedidos translate="title">
+                                <title>Estado de Pedidos</title>
+                                <sort_order>20</sort_order>
+                                <action>adminhtml/pedidos/index</action>
+                            </pedidos>
+                        </children>
+                    </andreani>
                 </children>
-            </andreani>
+            </sales>
         </menu>
 		<acl>
 			<resources>

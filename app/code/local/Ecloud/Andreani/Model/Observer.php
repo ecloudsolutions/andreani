@@ -108,6 +108,7 @@ class Ecloud_Andreani_Model_Observer extends Mage_Core_Model_Session_Abstract {
             $client         = new SoapClient($datos["urlConfirmar"], $options);
             $client->__setSoapHeaders(array($wsse_header));
 
+			// Limitamos el detalle de productos a 90 caracteres para que lo tome el WS de Andreani
 			if (strlen($datos["detalle_productos"]) >= 90){
 				$datos["detalle_productos"] = substr($datos["detalle_productos"],0,80) . "...";
 			}
