@@ -3,11 +3,11 @@
   <modules>
     <Ecloud_Andreani>
       <active>true</active>
-      <codePool>local</codePool>            
+      <codePool>community</codePool>            
 	        <depends>
                 <Mage_Shipping />
             </depends>
-      <version>0.1.2</version>
+      <version>0.1.10</version>
     </Ecloud_Andreani>
   </modules>
 </config>
