@@ -13,7 +13,7 @@ class Ecloud_Andreani_Block_Adminhtml_Pedidos_Grid extends Mage_Adminhtml_Block_
     {
         parent::__construct();
         $this->setId('andreani_order');
-        $this->setDefaultSort('id');
+        $this->setDefaultSort('id_orden');
         $this->setDefaultDir('DESC');
         $this->setSaveParametersInSession(true);
         $this->setUseAjax(true);

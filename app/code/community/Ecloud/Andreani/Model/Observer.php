@@ -20,6 +20,8 @@ class Ecloud_Andreani_Model_Observer extends Mage_Core_Model_Session_Abstract {
 		try {
 			// 1. Tomamos todos los datos de la orden
 			$datos 		= Mage::getSingleton('core/session')->getAndreani();
+
+Mage::log("Datos observer" . print_r($datos,true));
 			// 2. Buscamos el ID de la orden 
 			$OrderId = $observer->getEvent()->getOrder()->getId();
 			// 3. Los almacenamos en la tabla "andreani_order"
@@ -49,6 +51,7 @@ class Ecloud_Andreani_Model_Observer extends Mage_Core_Model_Session_Abstract {
 			            'estado'				=> 'Pendiente'
 					));
 			$model = Mage::getModel('andreani/order')->addData($_dataSave);
+Mage::log("Datos a guardar" . print_r($_dataSave,true));
             $model->save();
 
 			} catch (Exception $e) {
@@ -65,7 +68,6 @@ class Ecloud_Andreani_Model_Observer extends Mage_Core_Model_Session_Abstract {
 		$shipment = $observer->getEvent()->getShipment();
 		$order 	  = $shipment->getOrder();
 		$OrderId  = $order->getId();
-
 
 		// Traemos los datos de la tabla "andreani_order" según el OrderId[0] y asignarla a $datos
 		$collection = Mage::getModel('andreani/order')->getCollection()
@@ -87,7 +89,6 @@ class Ecloud_Andreani_Model_Observer extends Mage_Core_Model_Session_Abstract {
                 $datos["urlConfirmar"]	= "https://www.e-andreani.com/CASAWS/eCommerce/ImposicionRemota.svc?wsdl";
         }
 
-
 		$datos["username"] = Mage::getStoreConfig('carriers/andreaniconfig/usuario',Mage::app()->getStore());
 		$datos["password"] = Mage::getStoreConfig('carriers/andreaniconfig/password',Mage::app()->getStore());
 
@@ -96,6 +97,12 @@ class Ecloud_Andreani_Model_Observer extends Mage_Core_Model_Session_Abstract {
 			Mage::log("Andreani :: no existe nombre de usuario o contraseña para eAndreani");
 			return;
 		}
+
+		// Si el envio ya tiene un codigo de tracking no hacemos nada
+		if ($datos["cod_tracking"] != ""){
+			return;
+		}
+
 		// 2. Conectarse a eAndreani
 		try {
 			$options = array(
