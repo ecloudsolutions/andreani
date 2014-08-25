@@ -20,8 +20,6 @@ class Ecloud_Andreani_Model_Observer extends Mage_Core_Model_Session_Abstract {
 		try {
 			// 1. Tomamos todos los datos de la orden
 			$datos 		= Mage::getSingleton('core/session')->getAndreani();
-
-Mage::log("Datos observer" . print_r($datos,true));
 			// 2. Buscamos el ID de la orden 
 			$OrderId = $observer->getEvent()->getOrder()->getId();
 			// 3. Los almacenamos en la tabla "andreani_order"
@@ -51,7 +49,6 @@ Mage::log("Datos observer" . print_r($datos,true));
 			            'estado'				=> 'Pendiente'
 					));
 			$model = Mage::getModel('andreani/order')->addData($_dataSave);
-Mage::log("Datos a guardar" . print_r($_dataSave,true));
             $model->save();
 
 			} catch (Exception $e) {
