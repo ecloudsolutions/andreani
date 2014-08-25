@@ -135,19 +135,23 @@
 				<all>
 					<title>Allow Everything</title>
 				</all>
-				<admin>
-					<children>
-						<andreani translate="title" module="andreani">
-							<title>Andreani</title>
-							<sort_order>1000</sort_order>
-							<children>
-								<andreanibackend translate="title">
-									<title>Andreani</title>
-								</andreanibackend>
-							</children>
-						</andreani>
-					</children>
-				</admin>
+                <admin>
+                    <children>
+                        <sales>
+                            <children>
+                                <andreani translate="title" module="andreani">
+                                    <title>Andreani</title>
+                                    <sort_order>1000</sort_order>
+                                    <children>
+                                        <andreanibackend translate="title">
+                                            <title>Andreani</title>
+                                        </andreanibackend>
+                                    </children>
+                                </andreani>
+                            </children>
+                        </sales>
+                    </children>
+                </admin>
 			</resources>
 		</acl>
 		<layout>
