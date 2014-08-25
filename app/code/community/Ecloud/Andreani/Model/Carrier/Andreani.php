@@ -98,7 +98,7 @@
             $result = Mage::getModel('shipping/rate_result');
             $method = Mage::getModel('shipping/rate_result_method');
 
-            $error_msg = Mage::helper('andreani')->__("Su pedido supera el peso máximo de 50 kg permitido por Andreani. Por favor divida su orden en más pedidos o consulte al administrador de la tienda. Gracias y disculpe las molestias.");
+            $error_msg = Mage::helper('andreani')->__("Su pedido supera el peso máximo de 35 kg permitido por Andreani. Por favor divida su orden en más pedidos o consulte al administrador de la tienda. Gracias y disculpe las molestias.");
 
             // Optimizacion con OneStepCheckout
             if ($datos["cpDestino"]=="" && $datos["localidad"]=="" && $datos["provincia"]=="" && $datos["direccion"]=="") {
@@ -110,8 +110,8 @@
             }
 
             if ($this->_code == "andreaniestandar" & Mage::getStoreConfig('carriers/andreaniestandar/active',Mage::app()->getStore()) == 1) {
-                // En CASAWS        -> 50 kg
-                if($datos["peso"] >= 50){
+                // En CASAWS        -> 35 kg
+                if($datos["peso"] >= 35){
                     $error = Mage::getModel('shipping/rate_result_error'); 
                     $error->setCarrier($this->_code); 
                     $error->setCarrierTitle($this->getConfigData('title')); 
@@ -122,8 +122,8 @@
                 }
             }
             if ($this->_code == "andreaniurgente" & Mage::getStoreConfig('carriers/andreaniurgente/active',Mage::app()->getStore()) == 1) {
-                // En CASAWS        -> 50 kg
-                if($datos["peso"] >= 50){
+                // En CASAWS        -> 35 kg
+                if($datos["peso"] >= 35){
                     $error = Mage::getModel('shipping/rate_result_error'); 
                     $error->setCarrier($this->_code); 
                     $error->setCarrierTitle($this->getConfigData('title')); 
@@ -134,8 +134,8 @@
                 }
             }
             if ($this->_code == "andreanisucursal" & Mage::getStoreConfig('carriers/andreanisucursal/active',Mage::app()->getStore()) == 1) {
-                // En CASAWS        -> 50 kg
-                if($datos["peso"] >= 50){
+                // En CASAWS        -> 35 kg
+                if($datos["peso"] >= 35){
                     $error = Mage::getModel('shipping/rate_result_error'); 
                     $error->setCarrier($this->_code); 
                     $error->setCarrierTitle($this->getConfigData('title')); 
