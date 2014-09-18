@@ -143,9 +143,9 @@
                                     <title>Andreani</title>
                                     <sort_order>1000</sort_order>
                                     <children>
-                                        <andreanibackend translate="title">
-                                            <title>Andreani</title>
-                                        </andreanibackend>
+                                        <pedidos translate="title" module="andreani">
+                                            <title>Estado de pedidos</title>
+                                        </pedidos>
                                     </children>
                                 </andreani>
                             </children>
