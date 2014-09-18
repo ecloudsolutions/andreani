@@ -71,9 +71,10 @@
                         $freeBoxes += $_item->getQty();
                     }
                 }
-
-
             }
+            
+            $datos["valorDeclarado"] = round($datos["valorDeclarado"],0,PHP_ROUND_HALF_UP);
+
             // Seteamos las reglas
             if(isset($freeBoxes))   $this->setFreeBoxes($freeBoxes);
             
