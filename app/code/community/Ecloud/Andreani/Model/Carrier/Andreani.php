@@ -119,7 +119,16 @@
                     $error->setErrorMessage($error_msg); 
                     return $error;
                 } else {
-                    $result->append($this->_getAndreaniEstandar($datos,$request));
+                    $response = $this->_getAndreaniEstandar($datos,$request);
+                    if(is_string($response)){
+                        $error = Mage::getModel('shipping/rate_result_error'); 
+                        $error->setCarrier($this->_code); 
+                        $error->setCarrierTitle($this->getConfigData('title')); 
+                        $error->setErrorMessage($response); 
+                        return $error;
+                    } else {
+                        $result->append($response);
+                    }
                 }
             }
             if ($this->_code == "andreaniurgente" & Mage::getStoreConfig('carriers/andreaniurgente/active',Mage::app()->getStore()) == 1) {
@@ -131,7 +140,16 @@
                     $error->setErrorMessage($error_msg); 
                     return $error;
                 } else {
-                    $result->append($this->_getAndreaniUrgente($datos,$request));
+                    $response = $this->_getAndreaniEstandar($datos,$request);
+                    if(is_string($response)){
+                        $error = Mage::getModel('shipping/rate_result_error'); 
+                        $error->setCarrier($this->_code); 
+                        $error->setCarrierTitle($this->getConfigData('title')); 
+                        $error->setErrorMessage($response); 
+                        return $error;
+                    } else {
+                        $result->append($response);
+                    }
                 }
             }
             if ($this->_code == "andreanisucursal" & Mage::getStoreConfig('carriers/andreanisucursal/active',Mage::app()->getStore()) == 1) {
@@ -143,7 +161,16 @@
                     $error->setErrorMessage($error_msg); 
                     return $error;
                 } else {
-                    $result->append($this->_getAndreaniSucursal($datos,$request));
+                    $response = $this->_getAndreaniEstandar($datos,$request);
+                    if(is_string($response)){
+                        $error = Mage::getModel('shipping/rate_result_error'); 
+                        $error->setCarrier($this->_code); 
+                        $error->setCarrierTitle($this->getConfigData('title')); 
+                        $error->setErrorMessage($response); 
+                        return $error;
+                    } else {
+                        $result->append($response);
+                    }
                 }
             }
  
