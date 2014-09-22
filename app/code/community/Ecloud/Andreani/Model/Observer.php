@@ -171,7 +171,7 @@ class Ecloud_Andreani_Model_Observer extends Mage_Core_Model_Session_Abstract {
 			Mage::getModel('andreani/order')->load($id)->setData('cod_tracking',$phpresponse->ConfirmarCompraResult->NumeroAndreani)->save();
 			Mage::getModel('andreani/order')->load($id)->setData('recibo_tracking',$phpresponse->ConfirmarCompraResult->Recibo)->save();
 			Mage::getModel('andreani/order')->load($id)->setData('estado','Enviado')->save();
-			// Mage::getModel('andreani/order')->load($id)->setData('constancia',$ConstanciaURL)->save();
+			Mage::getModel('andreani/order')->load($id)->setData('constancia',$ConstanciaURL)->save();
 
 		} catch (SoapFault $e) {
 			Mage::log("Error: " . $e);
