@@ -1,7 +1,7 @@
 <?php
 /**
  * @version   0.1.10 04.08.2014
- * @author    ecloud solutions http://www.ecloudsolutions.com <info@ecloudsolutions.com>
+ * @author	ecloud solutions http://www.ecloudsolutions.com <info@ecloudsolutions.com>
  * @copyright Copyright (C) 2010 - 2014 ecloud solutions ®
  */
 ?><?php require_once Mage::getBaseDir('lib') . '/Andreani/wsseAuth.php';
@@ -25,31 +25,31 @@ class Ecloud_Andreani_Model_Observer extends Mage_Core_Model_Session_Abstract {
 			// 3. Los almacenamos en la tabla "andreani_order"
 			$_dataSave = (array(
 						'id_orden' 		=> intval($OrderId),
-			            'contrato' 		=> $datos["contrato"],
-			            'cliente'		=> $datos["cliente"],
-			            'direccion' 	=> $datos["direccion"],
-			            'localidad' 	=> $datos["localidad"],
-			            'provincia' 	=> $datos["provincia"],
-			            'cp_destino' 	=> $datos["cpDestino"],
-			            'sucursal_retiro' 		=> $datos["sucursalRetiro"],
-			            'direccion_sucursal'	=> $datos["DireccionSucursal"],
-			            'nombre' 		=> $datos["nombre"],
-			            'apellido' 		=> $datos["apellido"],
-			            'telefono' 		=> $datos["telefono"],
-			            'dni' 			=> $datos["dni"],
-			            'email' 		=> $datos["email"],
-			            'precio' 		=> $datos["precio"],
-			            'valor_declarado' 		=> $datos["valorDeclarado"],
-			            'volumen' 		=> $datos["volumen"],
-			            'peso' 			=> $datos["peso"],
-			            'detalle_productos' 	=> $datos["DetalleProductos"],
-			            'categoria_distancia_id'=> $datos["CategoriaDistanciaId"],
-			            'categoria_peso' 		=> $datos["CategoriaPeso"],
-			            'direccion_sucursal'	=> $datos["DireccionSucursal"],
-			            'estado'				=> 'Pendiente'
+						'contrato' 		=> $datos["contrato"],
+						'cliente'		=> $datos["cliente"],
+						'direccion' 	=> $datos["direccion"],
+						'localidad' 	=> $datos["localidad"],
+						'provincia' 	=> $datos["provincia"],
+						'cp_destino' 	=> $datos["cpDestino"],
+						'sucursal_retiro' 		=> $datos["sucursalRetiro"],
+						'direccion_sucursal'	=> $datos["DireccionSucursal"],
+						'nombre' 		=> $datos["nombre"],
+						'apellido' 		=> $datos["apellido"],
+						'telefono' 		=> $datos["telefono"],
+						'dni' 			=> $datos["dni"],
+						'email' 		=> $datos["email"],
+						'precio' 		=> $datos["precio"],
+						'valor_declarado' 		=> $datos["valorDeclarado"],
+						'volumen' 		=> $datos["volumen"],
+						'peso' 			=> $datos["peso"],
+						'detalle_productos' 	=> $datos["DetalleProductos"],
+						'categoria_distancia_id'=> $datos["CategoriaDistanciaId"],
+						'categoria_peso' 		=> $datos["CategoriaPeso"],
+						'direccion_sucursal'	=> $datos["DireccionSucursal"],
+						'estado'				=> 'Pendiente'
 					));
 			$model = Mage::getModel('andreani/order')->addData($_dataSave);
-            $model->save();
+			$model->save();
 
 			} catch (Exception $e) {
 				Mage::log("Error: " . $e);
@@ -68,23 +68,23 @@ class Ecloud_Andreani_Model_Observer extends Mage_Core_Model_Session_Abstract {
 
 		// Traemos los datos de la tabla "andreani_order" según el OrderId[0] y asignarla a $datos
 		$collection = Mage::getModel('andreani/order')->getCollection()
-        	->addFieldToFilter('id_orden', $OrderId);
-        $collection->getSelect()->limit(1);
+			->addFieldToFilter('id_orden', $OrderId);
+		$collection->getSelect()->limit(1);
 
-        if (!$collection) {
-        	Mage::log("Andreani :: no existe la orden en la tabla andreani_order.");
-        	return;
-        }
+		if (!$collection) {
+			Mage::log("Andreani :: no existe la orden en la tabla andreani_order.");
+			return;
+		}
 
-        foreach($collection as $thing) {
-		    $datos = $thing->getData();
+		foreach($collection as $thing) {
+			$datos = $thing->getData();
 		}
 
 		if (Mage::getStoreConfig('carriers/andreaniconfig/testmode',Mage::app()->getStore()) == 1) {
-                $datos["urlConfirmar"]  = "https://www.e-andreani.com/CASAStaging/eCommerce/ImposicionRemota.svc?wsdl";
-        } else {
-                $datos["urlConfirmar"]	= "https://www.e-andreani.com/CASAWS/eCommerce/ImposicionRemota.svc?wsdl";
-        }
+				$datos["urlConfirmar"]  = "https://www.e-andreani.com/CASAStaging/eCommerce/ImposicionRemota.svc?wsdl";
+		} else {
+				$datos["urlConfirmar"]	= "https://www.e-andreani.com/CASAWS/eCommerce/ImposicionRemota.svc?wsdl";
+		}
 
 		$datos["username"] = Mage::getStoreConfig('carriers/andreaniconfig/usuario',Mage::app()->getStore());
 		$datos["password"] = Mage::getStoreConfig('carriers/andreaniconfig/password',Mage::app()->getStore());
@@ -108,9 +108,9 @@ class Ecloud_Andreani_Model_Observer extends Mage_Core_Model_Session_Abstract {
 				'trace' 			=> 1,
 				'wdsl_local_copy'	=> true
 			);
-			$wsse_header    = new WsseAuthHeader($datos["username"], $datos["password"]);
-            $client         = new SoapClient($datos["urlConfirmar"], $options);
-            $client->__setSoapHeaders(array($wsse_header));
+			$wsse_header	= new WsseAuthHeader($datos["username"], $datos["password"]);
+			$client		 = new SoapClient($datos["urlConfirmar"], $options);
+			$client->__setSoapHeaders(array($wsse_header));
 
 			// Limitamos el detalle de productos a 90 caracteres para que lo tome el WS de Andreani
 			if (strlen($datos["detalle_productos"]) >= 90){
@@ -152,9 +152,9 @@ class Ecloud_Andreani_Model_Observer extends Mage_Core_Model_Session_Abstract {
 			// 4. Tomamos "NroAndreani" y lo almacenamos como "Tracking number"
 			$shipment 	= $observer->getEvent()->getShipment();
 			$track = Mage::getModel('sales/order_shipment_track')
-			    ->setNumber($phpresponse->ConfirmarCompraResult->NumeroAndreani)
-			    ->setCarrierCode('andreani') //carrier code
-			    ->setTitle('Andreani');
+				->setNumber($phpresponse->ConfirmarCompraResult->NumeroAndreani)
+				->setCarrierCode('andreani') //carrier code
+				->setTitle('Andreani');
 			$shipment->addTrack($track);
 
 			//Enviamos numero Andreani, nos devolvera el url de la constancia que lo almacenaremos en la tabla andreani_order.
@@ -171,7 +171,7 @@ class Ecloud_Andreani_Model_Observer extends Mage_Core_Model_Session_Abstract {
 			Mage::getModel('andreani/order')->load($id)->setData('cod_tracking',$phpresponse->ConfirmarCompraResult->NumeroAndreani)->save();
 			Mage::getModel('andreani/order')->load($id)->setData('recibo_tracking',$phpresponse->ConfirmarCompraResult->Recibo)->save();
 			Mage::getModel('andreani/order')->load($id)->setData('estado','Enviado')->save();
-			Mage::getModel('andreani/order')->load($id)->setData('constancia',$ConstanciaURL)->save();
+			// Mage::getModel('andreani/order')->load($id)->setData('constancia',$ConstanciaURL)->save();
 
 		} catch (SoapFault $e) {
 			Mage::log("Error: " . $e);

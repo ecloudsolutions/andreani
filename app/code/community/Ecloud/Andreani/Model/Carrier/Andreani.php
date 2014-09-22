@@ -140,7 +140,7 @@
                     $error->setErrorMessage($error_msg); 
                     return $error;
                 } else {
-                    $response = $this->_getAndreaniEstandar($datos,$request);
+                    $response = $this->_getAndreaniUrgente($datos,$request);
                     if(is_string($response)){
                         $error = Mage::getModel('shipping/rate_result_error'); 
                         $error->setCarrier($this->_code); 
@@ -161,7 +161,7 @@
                     $error->setErrorMessage($error_msg); 
                     return $error;
                 } else {
-                    $response = $this->_getAndreaniEstandar($datos,$request);
+                    $response = $this->_getAndreaniSucursal($datos,$request);
                     if(is_string($response)){
                         $error = Mage::getModel('shipping/rate_result_error'); 
                         $error->setCarrier($this->_code); 
