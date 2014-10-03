@@ -19,90 +19,99 @@
 		<models>
 			<andreani>
 				<class>Ecloud_Andreani_Model</class>
-                <resourceModel>andreani_resource</resourceModel>
+				<resourceModel>andreani_resource</resourceModel>
 			</andreani>
-            <andreani_resource>
-                <class>Ecloud_Andreani_Model_Resource</class>
-                <entities>
-                    <order>
-                        <table>andreani_order</table>
-                    </order>
-                </entities>
-            </andreani_resource>
+			<andreani_resource>
+				<class>Ecloud_Andreani_Model_Resource</class>
+				<entities>
+					<order>
+						<table>andreani_order</table>
+					</order>
+				</entities>
+			</andreani_resource>
 		</models>
 		<resources>
-            <andreani_setup>
-                <setup>
-                    <module>Ecloud_Andreani</module>
-                    <class>Mage_Eav_Model_Entity_Setup</class>
-                </setup>
-                <connection>
-                    <use>core_setup</use>
-                </connection>
-            </andreani_setup>
-            <andreani_write>
-                <connection>
-                    <use>core_write</use>
-                </connection>
-            </andreani_write>
-            <andreani_read>
-                <connection>
-                    <use>core_read</use>
-                </connection>
-            </andreani_read>
-        </resources>
+			<andreani_setup>
+				<setup>
+					<module>Ecloud_Andreani</module>
+					<class>Mage_Eav_Model_Entity_Setup</class>
+				</setup>
+				<connection>
+					<use>core_setup</use>
+				</connection>
+			</andreani_setup>
+			<andreani_write>
+				<connection>
+					<use>core_write</use>
+				</connection>
+			</andreani_write>
+			<andreani_read>
+				<connection>
+					<use>core_read</use>
+				</connection>
+			</andreani_read>
+		</resources>
 		<fieldsets>
-            <sales_copy_order_billing_address>
-                <dni><to_order>*</to_order></dni>
-            </sales_copy_order_billing_address>
-            <sales_copy_order_shipping_address>
-                <dni><to_order>*</to_order></dni>
-            </sales_copy_order_shipping_address>
-            <sales_convert_quote_address>
-                <dni><to_order_address>*</to_order_address><to_customer_address>*</to_customer_address></dni>
-            </sales_convert_quote_address>
-            <sales_convert_order_address>
-                <dni><to_quote_address>*</to_quote_address></dni>
-            </sales_convert_order_address>
+			<sales_copy_order_billing_address>
+				<dni><to_order>*</to_order></dni>
+			</sales_copy_order_billing_address>
+			<sales_copy_order_shipping_address>
+				<dni><to_order>*</to_order></dni>
+			</sales_copy_order_shipping_address>
+			<sales_convert_quote_address>
+				<dni><to_order_address>*</to_order_address><to_customer_address>*</to_customer_address></dni>
+			</sales_convert_quote_address>
+			<sales_convert_order_address>
+				<dni><to_quote_address>*</to_quote_address></dni>
+			</sales_convert_order_address>
 
-            <customer_address>
-                 <dni><to_quote_address>*</to_quote_address></dni>
-            </customer_address>
-            <checkout_onepage_billing>
-                <dni><to_customer>*</to_customer></dni>
-            </checkout_onepage_billing>
-        </fieldsets>
-        <events>
-            <sales_order_place_after>
-                <observers>
-                    <andreani_order_success>
-                        <type>singleton</type>
-                        <class>andreani/observer</class>
-                        <method>andreaniObserver</method>
-                    </andreani_order_success>
-                </observers>
-            </sales_order_place_after>
-            <sales_order_shipment_save_before>
-                <observers>
-                    <andreani>
-                        <type>singleton</type>
-                        <class>andreani/observer</class>
-                        <method>salesOrderShipmentSaveBefore</method>
-                    </andreani>
-                </observers>
-            </sales_order_shipment_save_before>
-        </events>
+			<customer_address>
+				 <dni><to_quote_address>*</to_quote_address></dni>
+			</customer_address>
+			<checkout_onepage_billing>
+				<dni><to_customer>*</to_customer></dni>
+			</checkout_onepage_billing>
+		</fieldsets>
+		<events>
+			<sales_order_place_after>
+				<observers>
+					<andreani_order_success>
+						<type>singleton</type>
+						<class>andreani/observer</class>
+						<method>andreaniObserver</method>
+					</andreani_order_success>
+				</observers>
+			</sales_order_place_after>
+			<sales_order_shipment_save_before>
+				<observers>
+					<andreani>
+						<type>singleton</type>
+						<class>andreani/observer</class>
+						<method>salesOrderShipmentSaveBefore</method>
+					</andreani>
+				</observers>
+			</sales_order_shipment_save_before>
+			<sales_order_shipment_save_after>
+				<observers>
+					<andreani>
+						<type>singleton</type>
+						<class>andreani/observer</class>
+						<method>salesOrderShipmentSaveAfter</method>
+					</andreani>
+				</observers>
+			</sales_order_shipment_save_after>
+		</events>
 	</global>
 	<admin>
 		<routers>
-            <adminhtml>
-                <args>
-                    <modules>
-                        <andreani before="Mage_Adminhtml">Ecloud_Andreani_Adminhtml</andreani>
-                    </modules>
-                </args>
-            </adminhtml>
-        </routers>
+			<adminhtml>
+				<args>
+					<modules>
+						<andreani before="Mage_Adminhtml">Ecloud_Andreani_Adminhtml</andreani>
+					</modules>
+				</args>
+			</adminhtml>
+		</routers>
 		<fieldsets>
 			<customer_dataflow>
 				<dni>
@@ -113,45 +122,41 @@
 		</fieldsets>
 	</admin>
 	<adminhtml>
-        <menu>
-            <sales>
-                <children>
-                    <andreani translate="title">
-                        <title>Andreani</title>
-                        <sort_order>91</sort_order>               
-                        <children>
-                            <pedidos translate="title">
-                                <title>Estado de Pedidos</title>
-                                <sort_order>20</sort_order>
-                                <action>adminhtml/pedidos/index</action>
-                            </pedidos>
-                        </children>
-                    </andreani>
-                </children>
-            </sales>
-        </menu>
+		<menu>
+			<sales>
+				<children>
+					<andreani translate="title">
+						<title>Andreani</title>
+						<sort_order>91</sort_order>			   
+						<children>
+							<pedidos translate="title">
+								<title>Estado de Pedidos</title>
+								<sort_order>20</sort_order>
+								<action>adminhtml/pedidos/index</action>
+							</pedidos>
+						</children>
+					</andreani>
+				</children>
+			</sales>
+		</menu>
 		<acl>
 			<resources>
 				<all>
 					<title>Allow Everything</title>
 				</all>
-                <admin>
-                    <children>
-                        <sales>
-                            <children>
-                                <andreani translate="title" module="andreani">
-                                    <title>Andreani</title>
-                                    <sort_order>1000</sort_order>
-                                    <children>
-                                        <pedidos translate="title" module="andreani">
-                                            <title>Estado de pedidos</title>
-                                        </pedidos>
-                                    </children>
-                                </andreani>
-                            </children>
-                        </sales>
-                    </children>
-                </admin>
+				<admin>
+					<children>
+						<andreani translate="title" module="andreani">
+							<title>Andreani</title>
+							<sort_order>1000</sort_order>
+							<children>
+								<pedidos translate="title" module="andreani">
+									<title>Andreani</title>
+								</pedidos>
+							</children>
+						</andreani>
+					</children>
+				</admin>
 			</resources>
 		</acl>
 		<layout>
@@ -163,38 +168,40 @@
 		</layout>
 	</adminhtml>
    	<default>
-        <carriers>
-            <andreaniconfig>
-                <cache>0</cache>
-                <medida>kilos</medida>
-            </andreaniconfig>
-            <andreaniestandar>
-                <active>0</active>
-                <model>andreani/carrier_andreaniestandar</model>
-                <name>andreani</name>
-                <title>Andreani Estandar</title>
-                <description><![CDATA[Recibí el pedido en tu casa.]]></description>
-                <sort_order>10</sort_order>
-                <regla>0</regla>
-            </andreaniestandar>
-            <andreaniurgente>
-                <active>0</active>
-                <model>andreani/carrier_andreaniurgente</model>
-                <name>andreaniurgente</name>
-                <title>Andreani Urgente</title>
-                <description><![CDATA[Recibí el pedido en tu casa en 24 hs!]]></description>
-                <sort_order>20</sort_order>
-                <regla>0</regla>
-            </andreaniurgente>
-            <andreanisucursal>
-                <active>0</active>
-                <model>andreani/carrier_andreanisucursal</model>
-                <name>andreanisucursal</name>
-                <title>Andreani Sucursal</title>
-                <description><![CDATA[Busca el pedido en la sucursal más cercana: ]]></description>
-                <sort_order>30</sort_order>
-                <regla>0</regla>
-            </andreanisucursal>
-        </carriers>
-    </default>
+		<carriers>
+			<andreaniconfig>
+				<cache>0</cache>
+				<medida>kilos</medida>
+				<pesomax>30</pesomax>
+				<metodo>completo</metodo>
+			</andreaniconfig>
+			<andreaniestandar>
+				<active>0</active>
+				<model>andreani/carrier_andreaniestandar</model>
+				<name>andreani</name>
+				<title>Andreani Estandar</title>
+				<description><![CDATA[Recibí el pedido en tu casa.]]></description>
+				<sort_order>10</sort_order>
+				<regla>0</regla>
+			</andreaniestandar>
+			<andreaniurgente>
+				<active>0</active>
+				<model>andreani/carrier_andreaniurgente</model>
+				<name>andreaniurgente</name>
+				<title>Andreani Urgente</title>
+				<description><![CDATA[Recibí el pedido en tu casa en 24 hs!]]></description>
+				<sort_order>20</sort_order>
+				<regla>0</regla>
+			</andreaniurgente>
+			<andreanisucursal>
+				<active>0</active>
+				<model>andreani/carrier_andreanisucursal</model>
+				<name>andreanisucursal</name>
+				<title>Andreani Sucursal</title>
+				<description><![CDATA[Busca el pedido en la sucursal más cercana: ]]></description>
+				<sort_order>30</sort_order>
+				<regla>0</regla>
+			</andreanisucursal>
+		</carriers>
+	</default>
 </config> 

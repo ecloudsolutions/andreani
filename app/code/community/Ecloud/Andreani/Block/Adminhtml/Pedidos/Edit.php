@@ -20,9 +20,10 @@ class Ecloud_Andreani_Block_Adminhtml_Pedidos_Edit extends Mage_Adminhtml_Block_
         //define the label for the save and delete button
         $this->_headerText = Mage::helper('andreani')->__('Edit Form');
 
-        //$this->_updateButton('save', 'label','Guardar');
+        $this->_updateButton('save', 'label', Mage::helper('andreani')->__('Guardar'));
+        
         //$this->_updateButton('delete', 'label', 'Delete');
-        $this->_removeButton('save');
+        //$this->_removeButton('save');
         $this->_removeButton('reset');
         $this->_removeButton('delete');
 

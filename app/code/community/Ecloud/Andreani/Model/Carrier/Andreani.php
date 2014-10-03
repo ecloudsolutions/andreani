@@ -27,6 +27,8 @@
             $datos["DetalleProductos"]  = "";
             $sku                        = "";
             $freeBoxes                  = 0;
+            $pesoMaximo = Mage::getStoreConfig('carriers/andreaniconfig/pesomax',Mage::app()->getStore());
+
             Mage::getSingleton('core/session')->unsAndreani();
 
             // Reiniciar variable Sucursales para descachear las Sucursales.
@@ -48,12 +50,13 @@
             } else {
                 $datos["medida"] = 1; //si está vacio: "gramos"
             }
-
+            
             foreach ($request->getAllItems() as $_item) {
                 if($sku != $_item->getSku()) {
                     $sku                     = $_item->getSku();
+		    $price		     = floor($_item->getPrice());
                     $datos["peso"]           = ($_item->getQty() * $_item->getWeight() * $datos["medida"]) + $datos["peso"];
-                    $datos["valorDeclarado"] = ($_item->getQty() * $_item->getPrice()) + $datos["valorDeclarado"];
+                    $datos["valorDeclarado"] = ($_item->getQty() * $price) + $datos["valorDeclarado"];
                     
                     $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $_item->getSku(), array('volumen'));
                     $datos["volumen"] += ($_item->getQty() * $product->getVolumen() * $datos["medida"]);
@@ -72,8 +75,6 @@
                     }
                 }
             }
-            
-            $datos["valorDeclarado"] = round($datos["valorDeclarado"],0,PHP_ROUND_HALF_UP);
 
             // Seteamos las reglas
             if(isset($freeBoxes))   $this->setFreeBoxes($freeBoxes);
@@ -81,10 +82,10 @@
             $cart   = Mage::getSingleton('checkout/cart');
             $quote  = $cart->getQuote();
             $shippingAddress        = $quote->getShippingAddress();
-            $datos["cpDestino"]     = intval($shippingAddress->getPostcode());
-            $datos["localidad"]     = $shippingAddress->getData('city');
-            $datos["provincia"]     = $shippingAddress->getData('region');
-            $datos["direccion"]     = $shippingAddress->getData('street');
+            $datos["cpDestino"]     = intval($request->getDestPostcode());
+            $datos["localidad"]     = $request->getDestCity();
+            $datos["provincia"]     = $request->getDestRegionCode();
+            $datos["direccion"]     = $request->getDestStreet();
             $datos["nombre"]        = $shippingAddress->getData('firstname');
             $datos["apellido"]      = $shippingAddress->getData('lastname');
             $datos["telefono"]      = $shippingAddress->getData('telephone');
@@ -99,7 +100,7 @@
             $result = Mage::getModel('shipping/rate_result');
             $method = Mage::getModel('shipping/rate_result_method');
 
-            $error_msg = Mage::helper('andreani')->__("Su pedido supera el peso máximo de 35 kg permitido por Andreani. Por favor divida su orden en más pedidos o consulte al administrador de la tienda. Gracias y disculpe las molestias.");
+            $error_msg = Mage::helper('andreani')->__("Completá los datos para poder calcular el costo de su pedido.");
 
             // Optimizacion con OneStepCheckout
             if ($datos["cpDestino"]=="" && $datos["localidad"]=="" && $datos["provincia"]=="" && $datos["direccion"]=="") {
@@ -110,9 +111,10 @@
                 return $error;
             }
 
+            $error_msg = Mage::helper('andreani')->__("Su pedido supera el peso máximo permitido por Andreani. Por favor divida su orden en más pedidos o consulte al administrador de la tienda. Gracias y disculpe las molestias.");
+
             if ($this->_code == "andreaniestandar" & Mage::getStoreConfig('carriers/andreaniestandar/active',Mage::app()->getStore()) == 1) {
-                // En CASAWS        -> 35 kg
-                if($datos["peso"] >= 35){
+                if($datos["volumen"] >= $pesoMaximo){
                     $error = Mage::getModel('shipping/rate_result_error'); 
                     $error->setCarrier($this->_code); 
                     $error->setCarrierTitle($this->getConfigData('title')); 
@@ -123,8 +125,8 @@
                     if(is_string($response)){
                         $error = Mage::getModel('shipping/rate_result_error'); 
                         $error->setCarrier($this->_code); 
-                        $error->setCarrierTitle($this->getConfigData('title')); 
-                        $error->setErrorMessage($response); 
+                        $error->setCarrierTitle($this->getConfigData('title'));
+                        $error->setErrorMessage($response);
                         return $error;
                     } else {
                         $result->append($response);
@@ -132,8 +134,7 @@
                 }
             }
             if ($this->_code == "andreaniurgente" & Mage::getStoreConfig('carriers/andreaniurgente/active',Mage::app()->getStore()) == 1) {
-                // En CASAWS        -> 35 kg
-                if($datos["peso"] >= 35){
+                if($datos["volumen"] >= $pesoMaximo){
                     $error = Mage::getModel('shipping/rate_result_error'); 
                     $error->setCarrier($this->_code); 
                     $error->setCarrierTitle($this->getConfigData('title')); 
@@ -144,7 +145,7 @@
                     if(is_string($response)){
                         $error = Mage::getModel('shipping/rate_result_error'); 
                         $error->setCarrier($this->_code); 
-                        $error->setCarrierTitle($this->getConfigData('title')); 
+                        $error->setCarrierTitle($this->getConfigData('title'));
                         $error->setErrorMessage($response); 
                         return $error;
                     } else {
@@ -153,8 +154,7 @@
                 }
             }
             if ($this->_code == "andreanisucursal" & Mage::getStoreConfig('carriers/andreanisucursal/active',Mage::app()->getStore()) == 1) {
-                // En CASAWS        -> 35 kg
-                if($datos["peso"] >= 35){
+                if($datos["volumen"] >= $pesoMaximo){
                     $error = Mage::getModel('shipping/rate_result_error'); 
                     $error->setCarrier($this->_code); 
                     $error->setCarrierTitle($this->getConfigData('title')); 
@@ -202,20 +202,15 @@
                 $datos["urlSucursal"]       = 'https://www.e-andreani.com/CASAWS/ecommerce/ConsultaSucursales.svc?wsdl';
             }
 
-            // Buscamos la sucursal mas cercana del cliente segun el CP ingresado
-            $sucursales             = $this->consultarSucursales($datos,"estandar");       
-            $datos["sucursalRetiro"]= $sucursales->Sucursal;
-            $datos["DireccionSucursal"]     = $sucursales->Direccion;
-
             // Buscamos en eAndreani el costo del envio segun los parametros enviados
             $datos["precio"]                = $this->cotizarEnvio($datos);
             $datos["CategoriaDistanciaId"]  = $this->envio->CategoriaDistanciaId;
             $datos["CategoriaPeso"]         = $this->envio->CategoriaPeso;
 
-            Mage::getSingleton('core/session')->setAndreani($datos);
+            Mage::getSingleton('core/session')->setAndreaniEstandar($datos);
 
             if ($datos["precio"] == 0) {
-                $texto  = "Error en la conexión con eAndreani. Por favor chequear los datos ingresados en la información de envio.";
+                return $texto  = Mage::helper('andreani')->__("Error en la conexión con Andreani. Por favor chequee los datos ingresados en la información de envio y vuelva a intentar.");
             } else {
                 $texto  = Mage::getStoreConfig('carriers/andreaniestandar/description',Mage::app()->getStore()) . " {$this->envio->CategoriaDistancia}.";
             }
@@ -263,20 +258,15 @@
                 $datos["urlSucursal"]       = 'https://www.e-andreani.com/CASAWS/ecommerce/ConsultaSucursales.svc?wsdl';
             }
 
-            // Buscamos la sucursal mas cercana del cliente segun el CP ingresado
-            $sucursales             = $this->consultarSucursales($datos,"urgente");            
-            $datos["sucursalRetiro"]= $sucursales->Sucursal;
-            $datos["DireccionSucursal"]     = $sucursales->Direccion;
-
             // Buscamos en eAndreani el costo del envio segun los parametros enviados
             $datos["precio"]                = $this->cotizarEnvio($datos);
             $datos["CategoriaDistanciaId"]  = $this->envio->CategoriaDistanciaId;
             $datos["CategoriaPeso"]         = $this->envio->CategoriaPeso;
 
-            Mage::getSingleton('core/session')->setAndreani($datos);
+            Mage::getSingleton('core/session')->setAndreaniUrgente($datos);
 
             if ($datos["precio"] == 0) {
-                $texto  = "Error en la conexión con eAndreani. Por favor chequear los datos ingresados en la información de envio.";
+                return $texto  = Mage::helper('andreani')->__("Error en la conexión con Andreani. Por favor chequee los datos ingresados en la información de envio y vuelva a intentar.");
             } else {
                 $texto  = Mage::getStoreConfig('carriers/andreaniurgente/description',Mage::app()->getStore()) . " {$this->envio->CategoriaDistancia}.";
             }
@@ -313,6 +303,7 @@
             $rate->setCarrier($this->_code);
             $rate->setCarrierTitle("Andreani");
             $rate->setMethod($this->_code);
+            $metodo = Mage::getStoreConfig('carriers/andreaniconfig/metodo',Mage::app()->getStore());
 
             $datos["contrato"]      = Mage::getStoreConfig('carriers/andreanisucursal/contrato',Mage::app()->getStore());
 
@@ -325,7 +316,12 @@
             }
 
             // Buscamos la sucursal mas cercana del cliente segun el CP ingresado
-            $sucursales             = $this->consultarSucursales($datos,"sucursal");            
+            $sucursales             = $this->consultarSucursales($datos,"sucursal");
+
+            if($sucursales=="nosucursal"){
+                return "No hay sucursales cerca de tu domicilio.";
+            }           
+
             $datos["sucursalRetiro"]= $sucursales->Sucursal;
             $datos["DireccionSucursal"]     = $sucursales->Direccion;
 
@@ -333,15 +329,19 @@
             $datos["precio"]                = $this->cotizarEnvio($datos);
 
             if ($datos["precio"] == 0) {
-                $texto  = "Error en la conexión con eAndreani. Por favor chequear los datos ingresados en la información de envio.";
+            	return $texto  = Mage::helper('andreani')->__("Error en la conexión con Andreani. Por favor chequee los datos ingresados en la información de envio y vuelva a intentar.");
             } else {
-                $texto  = Mage::getStoreConfig('carriers/andreanisucursal/description',Mage::app()->getStore()) . " {$sucursales->Descripcion} ({$sucursales->Direccion}). Estas a {$this->distancia_final_txt} {$this->mode} ({$this->duracion_final}).";
+                if($metodo != 'basico'){
+                    $texto  = Mage::getStoreConfig('carriers/andreanisucursal/description',Mage::app()->getStore()) . " {$sucursales->Descripcion} ({$sucursales->Direccion}). Estas a {$this->distancia_final_txt} {$this->mode} ({$this->duracion_final}).";
+                }else{
+                    $texto  = Mage::getStoreConfig('carriers/andreanisucursal/description',Mage::app()->getStore()) . " {$sucursales->Descripcion} ({$sucursales->Direccion}).";
+                }
             }
 
             $datos["CategoriaDistanciaId"]  = $this->envio->CategoriaDistanciaId;
             $datos["CategoriaPeso"]         = $this->envio->CategoriaPeso;
 
-            Mage::getSingleton('core/session')->setAndreani($datos);
+            Mage::getSingleton('core/session')->setAndreaniSucursal($datos);
 
             $rate->setMethodTitle($texto);
             
@@ -421,6 +421,8 @@
          * @return $costoEnvio
          */
         public function consultarSucursales($params,$metodo) {
+
+            $metodo = Mage::getStoreConfig('carriers/andreaniconfig/metodo',Mage::app()->getStore());
             try {
                 // Nos fijamos si ya consultamos la sucursal en Andreani
                 if(is_object(Mage::getSingleton('core/session')->getSucursales())) {
@@ -452,7 +454,6 @@
                 $client         = new SoapClient($params["urlSucursal"], $options);
                 $client->__setSoapHeaders(array($wsse_header));
                 
-                if ($params["cpDestino"] == "") { $params["cpDestino"] = "00000000"; }
                 $phpresponse = $client->ConsultarSucursales(array(
                     'consulta' => array(
                         'CodigoPostal'  =>  $params["cpDestino"],
@@ -464,64 +465,69 @@
                     Mage::log("Entra si encuentra el CP");
                      // Si no tenemos la direccion del cliente pero SI el CP, deberia mostrarnos la sucursal de nuestra localidad sin calcular la distancia a la misma.
                     $sucursales = $phpresponse->ConsultarSucursalesResult->ResultadoConsultarSucursales;
-                    if ($this->_code == "andreanisucursal") { $sucursales = $this->distancematrix(array('0' => $sucursales),$params["direccion"],$params["localidad"],$params["provincia"]); }
+                    if ($this->_code == "andreanisucursal" && ($metodo == 'medio' || $metodo == 'completo') == 1) { 
+                        $sucursales = $this->distancematrix(array('0' => $sucursales),$params["direccion"],$params["localidad"],$params["provincia"]);
+                    }
                 } else {
-                    Mage::log("No encontro el CP y busca por localidad: " . $params["localidad"]);
-                    $phpresponse = $client->ConsultarSucursales(array(
-                        'consulta' => array(
-                            'CodigoPostal'  =>  NULL,
-                            'Localidad'     =>  $params["localidad"],
-                            'Provincia'     =>  NULL
-                    )));
-                    if (is_object($phpresponse->ConsultarSucursalesResult->ResultadoConsultarSucursales) OR is_array($phpresponse->ConsultarSucursalesResult->ResultadoConsultarSucursales)) {
-                        Mage::log("Encontro localidad");
-                        $sucursales = $phpresponse->ConsultarSucursalesResult->ResultadoConsultarSucursales;
-                        if (is_array($sucursales)) {
-                            Mage::log("Encontro mas de una localidad");
-                            // Consultamos por "localidad" y encontro varios resultados
-                            // buscamos en GoogleAPI cual es la sucursal mas cercana segun la direccion del cliente
-                            $sucursales = $this->distancematrix($sucursales,$params["direccion"],$params["localidad"],$params["provincia"]); 
-                        } else {
-                            if ($this->_code == "andreanisucursal") { $sucursales = $this->distancematrix(array('0' => $sucursales),$params["direccion"],$params["localidad"],$params["provincia"]); }
-                        }
+                    if($metodo != 'completo'){
+                        $sucursales = "nosucursal";                        
                     } else {
-                        Mage::log("No encontro la localidad busca por provincia");
-                        if ($params["provincia"]=="") {
-                            $params["provincia"] = NULL;
-                            Mage::log("Entra si la provincia esta vacia");
-                        }
                         $phpresponse = $client->ConsultarSucursales(array(
                             'consulta' => array(
                                 'CodigoPostal'  =>  NULL,
-                                'Localidad'     =>  NULL,
-                                'Provincia'     =>  $params["provincia"]
+                                'Localidad'     =>  $params["localidad"],
+                                'Provincia'     =>  NULL
                         )));
-
-
                         if (is_object($phpresponse->ConsultarSucursalesResult->ResultadoConsultarSucursales) OR is_array($phpresponse->ConsultarSucursalesResult->ResultadoConsultarSucursales)) {
-                            Mage::log("Encontro sucursales en la provincia. Si está vacia.. nos trae todas las provincias");
+                            Mage::log("Encontro localidad");
                             $sucursales = $phpresponse->ConsultarSucursalesResult->ResultadoConsultarSucursales;
                             if (is_array($sucursales)) {
-                                Mage::log("Encontro muchas sucursales en la provincia");
-                                // Consultamos por "provincia" y encontro varios resultados
+                                Mage::log("Encontro mas de una localidad");
+                                // Consultamos por "localidad" y encontro varios resultados
                                 // buscamos en GoogleAPI cual es la sucursal mas cercana segun la direccion del cliente
-                                $sucursales = $this->distancematrix($sucursales,$params["direccion"],$params["localidad"],$params["provincia"]);
+                                $sucursales = $this->distancematrix($sucursales,$params["direccion"],$params["localidad"],$params["provincia"]); 
                             } else {
                                 if ($this->_code == "andreanisucursal") { $sucursales = $this->distancematrix(array('0' => $sucursales),$params["direccion"],$params["localidad"],$params["provincia"]); }
                             }
                         } else {
-                            Mage::log("No encontro la provincia y busca todas las localidades para determinar la mas cercana");
-                            // buscar todas las sucursales
-                            // buscamos en GoogleAPI cual es la sucursal mas cercana segun la direccion del cliente
+                            Mage::log("No encontro la localidad busca por provincia");
+                            if ($params["provincia"]=="") {
+                                $params["provincia"] = NULL;
+                                Mage::log("Entra si la provincia esta vacia");
+                            }
                             $phpresponse = $client->ConsultarSucursales(array(
                                 'consulta' => array(
                                     'CodigoPostal'  =>  NULL,
                                     'Localidad'     =>  NULL,
-                                    'Provincia'     =>  NULL
+                                    'Provincia'     =>  $params["provincia"]
                             )));
-                            $sucursales = $phpresponse->ConsultarSucursalesResult->ResultadoConsultarSucursales;
 
-                            $sucursales = $this->distancematrix($sucursales,$params["direccion"],$params["localidad"],$params["provincia"]);
+
+                            if (is_object($phpresponse->ConsultarSucursalesResult->ResultadoConsultarSucursales) OR is_array($phpresponse->ConsultarSucursalesResult->ResultadoConsultarSucursales)) {
+                                Mage::log("Encontro sucursales en la provincia. Si está vacia.. nos trae todas las provincias");
+                                $sucursales = $phpresponse->ConsultarSucursalesResult->ResultadoConsultarSucursales;
+                                if (is_array($sucursales)) {
+                                    Mage::log("Encontro muchas sucursales en la provincia");
+                                    // Consultamos por "provincia" y encontro varios resultados
+                                    // buscamos en GoogleAPI cual es la sucursal mas cercana segun la direccion del cliente
+                                    $sucursales = $this->distancematrix($sucursales,$params["direccion"],$params["localidad"],$params["provincia"]);
+                                } else {
+                                    if ($this->_code == "andreanisucursal") { $sucursales = $this->distancematrix(array('0' => $sucursales),$params["direccion"],$params["localidad"],$params["provincia"]); }
+                                }
+                            } else {
+                                Mage::log("No encontro la provincia y busca todas las localidades para determinar la mas cercana");
+                                // buscar todas las sucursales
+                                // buscamos en GoogleAPI cual es la sucursal mas cercana segun la direccion del cliente
+                                $phpresponse = $client->ConsultarSucursales(array(
+                                    'consulta' => array(
+                                        'CodigoPostal'  =>  NULL,
+                                        'Localidad'     =>  NULL,
+                                        'Provincia'     =>  NULL
+                                )));
+                                $sucursales = $phpresponse->ConsultarSucursalesResult->ResultadoConsultarSucursales;
+
+                                $sucursales = $this->distancematrix($sucursales,$params["direccion"],$params["localidad"],$params["provincia"]);
+                            }
                         }
                     }
                 }

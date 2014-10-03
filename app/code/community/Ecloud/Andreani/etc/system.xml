@@ -82,6 +82,30 @@
                             <show_in_store>1</show_in_store>
                             <sort_order>60</sort_order>
                         </medida>
+                        <pesomax translate="label">
+                           <label>Peso máximo habilitado:</label>
+                           <comment>
+                            <![CDATA[Consulta con Andreani para ampliar el peso máximo habilitado para tu usuario.]]>
+                           </comment>
+                           <frontend_type>select</frontend_type>
+                           <source_model>andreani/config_Pesomax</source_model>
+                           <sort_order>70</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                        </pesomax>
+                        <metodo translate="label">
+                           <label>Metodo consulta sucursales:</label>
+                           <comment>
+                            <![CDATA[Básico consulta solo por CP. Medio consulta por CP e informa al cliente a cuanto esta de la sucursal. Completo consulta por CP, provincia/localidad, calcula la mas cercana en caso de encontrar varias y la selecciona.]]>
+                           </comment>
+                           <frontend_type>select</frontend_type>
+                           <source_model>andreani/config_Metodo</source_model>
+                           <sort_order>80</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                        </metodo> 
                     </fields>
                 </andreaniconfig>
                 <andreanisucursal translate="label"> 

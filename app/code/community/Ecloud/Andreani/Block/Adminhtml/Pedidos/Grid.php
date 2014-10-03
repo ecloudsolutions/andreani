@@ -45,6 +45,14 @@ class Ecloud_Andreani_Block_Adminhtml_Pedidos_Grid extends Mage_Adminhtml_Block_
             'type'  => 'text'
         ));
 
+        $this->addColumn('order_increment_id', array(
+            'header' => Mage::helper('andreani')->__('# Pedido'),
+            'sortable' => true,
+            'width' => '5',
+            'index' => 'order_increment_id',
+            'type'  => 'text'
+        ));
+
         $this->addColumn('nombre', array(
             'header' => Mage::helper('andreani')->__('Nombre'),
             'sortable' => true,
@@ -115,13 +123,27 @@ class Ecloud_Andreani_Block_Adminhtml_Pedidos_Grid extends Mage_Adminhtml_Block_
 			'renderer'  => 'andreani/adminhtml_Pedidos_Edit_Renderer_button'
         ));
 
+        $this->addColumn('entrega', array(
+            'header' => Mage::helper('andreani')->__('Fecha de entrega'),
+            'sortable' => true,
+            'width' => '5',
+            'index' => 'entrega',
+            'type'  => 'text'
+        ));
+
         $this->addColumn('estado', array(
             'header'    => Mage::helper('andreani')->__('Estado'),
             'sortable'  => false,
             'width'     => '5',
             'index'     => 'estado',
-            'type'      => 'text',
-            
+            'type'      => 'options',
+            'sortable'  => false,
+            'options'   => array(
+                'Enviado'   => 'Enviado',
+                'Eliminar'  => 'Eliminar',
+                'Entregado' => 'Entregado',
+                'Pendiente' => 'Pendiente'
+            )
         ));
  
         return parent::_prepareColumns();

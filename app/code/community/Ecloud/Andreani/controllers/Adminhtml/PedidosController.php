@@ -10,7 +10,7 @@ class Ecloud_Andreani_Adminhtml_PedidosController extends Mage_Adminhtml_Control
 
     public function indexAction()
     {
-    	$this->_title($this->__('Andreani'))->_title($this->__('Estado de pedidos'));
+    	$this->_title($this->__('Andreani'))->_title($this->__('Estado de pedidos de Andreani'));
         $this->loadLayout();
         $this->_setActiveMenu('andreani/andreani');
         $this->_addContent($this->getLayout()->createBlock('andreani/adminhtml_pedidos'));
@@ -68,7 +68,10 @@ class Ecloud_Andreani_Adminhtml_PedidosController extends Mage_Adminhtml_Control
 			Mage::getSingleton('adminhtml/session')->addError(Mage::helper('andreani')->__('Por favor seleccionar una orden!'));
 		} else {
 			try {
+				date_default_timezone_set('America/Argentina/Buenos_Aires');
+				$date = date('d/m/Y h:i:s A', time());
 				foreach ($ids as $id) {
+					Mage::getModel('andreani/order')->load($id)->setData("entrega",$date)->save();
 					Mage::getModel('andreani/order')->load($id)->setData("estado","Entregado")->save();
 				}
 				Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('andreani')->__('Se han actualizado %d registro(s).', count($ids)));
@@ -182,6 +185,18 @@ class Ecloud_Andreani_Adminhtml_PedidosController extends Mage_Adminhtml_Control
 		$this->getLayout()->getBlock('content')->append($block);
 		$this->renderLayout();
     }
+
+    public function saveAction() {
+		if ($data = $this->getRequest()->getPost()) {
+			$model = Mage::getModel('andreani/order');
+			$model->setData($data)->setId($this->getRequest()->getParam('id'));
+			$model->save();
+			Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('andreani')->__('El pedido fue editado con éxito.'));
+			Mage::getSingleton('adminhtml/session')->setFormData(false);
+		}
+			
+        $this->_redirect('*/*/');
+	}
 
 }
 ?>
