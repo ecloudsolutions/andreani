@@ -7,7 +7,7 @@
 	        <depends>
                 <Mage_Shipping />
             </depends>
-      <version>0.1.10</version>
+      <version>0.1.11</version>
     </Ecloud_Andreani>
   </modules>
 </config>
