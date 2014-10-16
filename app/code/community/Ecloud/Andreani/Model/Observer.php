@@ -216,5 +216,20 @@ Mage::log("Datos a guardar" . print_r($_dataSave,true));
 		}
 	}
 
+	/**
+	* Agregar massAction al sales_order
+	*/
+	public function addMassAction($observer) {
+        $block = $observer->getEvent()->getBlock();
+        if(get_class($block) =='Mage_Adminhtml_Block_Widget_Grid_Massaction'
+            && $block->getRequest()->getControllerName() == 'sales_order')
+        {
+            $block->addItem('newmodule', array(
+                'label' => 'Imponer en andreani',
+                'url' => Mage::app()->getStore()->getUrl('newmodule/controller/action'),
+            ));
+        }
+    }
+
 }
 ?>
