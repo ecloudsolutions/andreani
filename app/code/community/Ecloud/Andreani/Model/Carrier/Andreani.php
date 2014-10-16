@@ -320,9 +320,11 @@
 
             if($sucursales=="nosucursal"){
                 return "No hay sucursales cerca de tu domicilio.";
-            }           
+            }elseif ($sucursales->Sucursal == 0) {
+                return "Lo siento ha fallado la comunicación con Andreani, por favor vuelve a intentarlo.";
+            }          
 
-            $datos["sucursalRetiro"]= $sucursales->Sucursal;
+            $datos["sucursalRetiro"]        = $sucursales->Sucursal;
             $datos["DireccionSucursal"]     = $sucursales->Direccion;
 
             // Buscamos en eAndreani el costo del envio segun los parametros enviados

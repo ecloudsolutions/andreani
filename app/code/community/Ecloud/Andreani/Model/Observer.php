@@ -154,7 +154,7 @@ Mage::log("Datos a guardar" . print_r($_dataSave,true));
 						'Localidad' 			=> $datos["localidad"],
 						'NombreApellido' 		=> $datos["nombre"] . " " . $datos["apellido"],
 						'NombreApellidoAlternativo' => NULL,
-						'Numero' 				=> $datos["direccion"],
+						'Numero' 				=> ".",
 						'NumeroCelular' 		=> $datos["telefono"],
 						'NumeroDocumento' 		=> $datos["dni"],
 						'NumeroTelefono' 		=> $datos["telefono"],
