@@ -224,9 +224,9 @@ Mage::log("Datos a guardar" . print_r($_dataSave,true));
         if(get_class($block) =='Mage_Adminhtml_Block_Widget_Grid_Massaction'
             && $block->getRequest()->getControllerName() == 'sales_order')
         {
-            $block->addItem('newmodule', array(
+            $block->addItem('andreani', array(
                 'label' => 'Imponer en andreani',
-                'url' => Mage::app()->getStore()->getUrl('newmodule/controller/action'),
+                'url' => Mage::app()->getStore()->getUrl('andreani/adminhtml_orders/imponer'),
             ));
         }
     }
