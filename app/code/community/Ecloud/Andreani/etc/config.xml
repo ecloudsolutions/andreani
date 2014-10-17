@@ -111,6 +111,13 @@
 					</modules>
 				</args>
 			</adminhtml>
+			<andreani>
+                <use>admin</use>
+                <args>
+                    <module>Ecloud_Andreani</module>
+                    <frontName>andreani</frontName>
+                </args>
+            </andreani>
 		</routers>
 		<fieldsets>
 			<customer_dataflow>
@@ -167,15 +174,15 @@
 			</updates>
 		</layout>
 		<events>
-        <core_block_abstract_prepare_layout_before>
-            <observers>
-                <andreani_core_block_abstract_prepare_layout_before>
-                    <class>andreani/observer</class>
-                    <method>addMassAction</method>
-                </andreani_core_block_abstract_prepare_layout_before>
-            </observers>
-        </core_block_abstract_prepare_layout_before>
-    </events>
+	        <core_block_abstract_prepare_layout_before>
+	            <observers>
+	                <andreani_core_block_abstract_prepare_layout_before>
+	                    <class>andreani/observer</class>
+	                    <method>addMassAction</method>
+	                </andreani_core_block_abstract_prepare_layout_before>
+	            </observers>
+	        </core_block_abstract_prepare_layout_before>
+	    </events>
 	</adminhtml>
    	<default>
 		<carriers>

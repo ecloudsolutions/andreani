@@ -70,7 +70,6 @@ class Ecloud_Andreani_Model_Observer extends Mage_Core_Model_Session_Abstract {
 			            'estado'				=> 'Pendiente'
 					));
 			$model = Mage::getModel('andreani/order')->addData($_dataSave);
-Mage::log("Datos a guardar" . print_r($_dataSave,true));
             $model->save();
 
 			} catch (Exception $e) {
@@ -225,8 +224,9 @@ Mage::log("Datos a guardar" . print_r($_dataSave,true));
             && $block->getRequest()->getControllerName() == 'sales_order')
         {
             $block->addItem('andreani', array(
-                'label' => 'Imponer en andreani',
-                'url' => Mage::app()->getStore()->getUrl('andreani/adminhtml_orders/imponer'),
+                'label' => 'Imponer en Andreani',
+                'url' => $block->getUrl('andreani/adminhtml_orders/impandreani'),
+                'confirm' => Mage::helper('sales')->__('Desea imponer las ordenes en Andreani?')
             ));
         }
     }
