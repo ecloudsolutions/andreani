@@ -350,7 +350,12 @@
             if($request->getFreeShipping() == true || $request->getPackageQty() == $this->getFreeBoxes()) {
                 $shippingPrice = '0.00';
                 // cambiamos el titulo para indicar que el envio es gratis
-                $rate->setMethodTitle(Mage::helper('andreani')->__('Envío gratis.'));
+                if($metodo != 'basico'){
+                    $direSucu  = " {$sucursales->Descripcion} ({$sucursales->Direccion}). Estas a {$this->distancia_final_txt} {$this->mode} ({$this->duracion_final}).";
+                }else{
+                    $direSucu  = " {$sucursales->Descripcion} ({$sucursales->Direccion}).";
+                }
+                $rate->setMethodTitle(Mage::helper('andreani')->__('Envío gratis.') . $direSucu);
             } else { 
                 $shippingPrice = $this->getFinalPriceWithHandlingFee($datos["precio"]);
             }
