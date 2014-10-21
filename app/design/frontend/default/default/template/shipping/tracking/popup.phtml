@@ -126,6 +126,10 @@
                         <th class="label"><?php echo ($track['title'] ? $this->escapeHtml($track['title']) : $this->__('N/A')); ?>:</th>
 
                         <h2><?php echo $this->helper('andreani')->__("Número Andreani: ") . $track['number']; ?></h2>
+                        <h2>
+                            <?php echo $this->helper('andreani')->__("Chequeá tu pedido desde Andreani haciendo "); ?> <a href="https://www.e-andreani.com/SeguimientoWeb/SeguimientoWeb.aspx?NumeroEnvio=<?php echo $track['number']; ?>" target="_blank"><strong><?php echo $this->helper('andreani')->__("click acá"); ?></strong></a>
+                        </h2>
+
                         <br />
                         <td class="value">
                             <?php /** @var $this Mage_Shipping_Block_Tracking_Popup */
@@ -135,7 +139,7 @@
                                 echo $this->helper('andreani')->__($result["Nropieza"]) . "<br/>";
                                 echo $this->helper('andreani')->__("Identificación: ") . $result["NombreEnvio"] . "<br/>";
                                 echo "<hr>";
-                                $cont = 1;
+                                /*$cont = 1;
                                 foreach ($result["Eventos"] as $value) {
                                     echo "<strong>" . $this->helper('andreani')->__("Evento N°: ") . $cont . "</strong><br/>";
                                     echo $this->helper('andreani')->__("Fecha del evento: ") . $value["Fecha"] . "<br/>";
@@ -144,7 +148,7 @@
                                     echo $this->helper('andreani')->__("Sucursal: ") . $value["Sucursal"] . "<br/>";
                                     echo "<hr>";
                                     $cont++;
-                                }
+                                }*/
                             ?>
                         </td>
                     </tr>
@@ -196,6 +200,11 @@
 <?php else: ?>
     <p><?php echo $this->__('There is no tracking available.'); ?></p>
 <?php endif; ?>
+
+ <a href="https://www.e-andreani.com/SeguimientoWeb/SeguimientoWeb.aspx?NumeroEnvio=<?php echo $track['number']; ?>">
+        <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('andreani')->toHtml(); ?>
+    </a>
+
 <div class="buttons-set">
     <button type="button" title="<?php echo $this->__('Close Window') ?>" class="button" onclick="window.close(); window.opener.focus();"><span><span><?php echo $this->__('Close Window') ?></span></span></button>
 </div>
