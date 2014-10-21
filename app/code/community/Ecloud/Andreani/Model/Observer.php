@@ -208,7 +208,7 @@ class Ecloud_Andreani_Model_Observer extends Mage_Core_Model_Session_Abstract {
 		// enviamos el mail con el tracking code
 		if($shipment){
 			if(!$shipment->getEmailSent()){
-				$shipment->sendEmail(true);
+				$shipment->sendEmail(true,'');
 				$shipment->setEmailSent(true);
 				$shipment->save();
 			}
