@@ -14,6 +14,5 @@ class Ecloud_Andreani_Adminhtml_Tracking_PedidosController extends Mage_Adminhtm
         $this->_addContent($this->getLayout()->createBlock('andreani/adminhtml_pedidos'));
         $this->renderLayout();
     }
-
 }
 ?>
