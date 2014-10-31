@@ -54,7 +54,7 @@
             foreach ($request->getAllItems() as $_item) {
                 if($sku != $_item->getSku()) {
                     $sku                     = $_item->getSku();
-		    $price		     = floor($_item->getPrice());
+            $price           = floor($_item->getPrice());
                     $datos["peso"]           = ($_item->getQty() * $_item->getWeight() * $datos["medida"]) + $datos["peso"];
                     $datos["valorDeclarado"] = ($_item->getQty() * $price) + $datos["valorDeclarado"];
                     
@@ -114,7 +114,7 @@
             $error_msg = Mage::helper('andreani')->__("Su pedido supera el peso máximo permitido por Andreani. Por favor divida su orden en más pedidos o consulte al administrador de la tienda. Gracias y disculpe las molestias.");
 
             if ($this->_code == "andreaniestandar" & Mage::getStoreConfig('carriers/andreaniestandar/active',Mage::app()->getStore()) == 1) {
-                if($datos["volumen"] >= $pesoMaximo){
+                if($datos["peso"] >= $pesoMaximo){
                     $error = Mage::getModel('shipping/rate_result_error'); 
                     $error->setCarrier($this->_code); 
                     $error->setCarrierTitle($this->getConfigData('title')); 
@@ -134,7 +134,7 @@
                 }
             }
             if ($this->_code == "andreaniurgente" & Mage::getStoreConfig('carriers/andreaniurgente/active',Mage::app()->getStore()) == 1) {
-                if($datos["volumen"] >= $pesoMaximo){
+                if($datos["peso"] >= $pesoMaximo){
                     $error = Mage::getModel('shipping/rate_result_error'); 
                     $error->setCarrier($this->_code); 
                     $error->setCarrierTitle($this->getConfigData('title')); 
@@ -154,7 +154,7 @@
                 }
             }
             if ($this->_code == "andreanisucursal" & Mage::getStoreConfig('carriers/andreanisucursal/active',Mage::app()->getStore()) == 1) {
-                if($datos["volumen"] >= $pesoMaximo){
+                if($datos["peso"] >= $pesoMaximo){
                     $error = Mage::getModel('shipping/rate_result_error'); 
                     $error->setCarrier($this->_code); 
                     $error->setCarrierTitle($this->getConfigData('title')); 
@@ -331,7 +331,7 @@
             $datos["precio"]                = $this->cotizarEnvio($datos);
 
             if ($datos["precio"] == 0) {
-            	return $texto  = Mage::helper('andreani')->__("Error en la conexión con Andreani. Por favor chequee los datos ingresados en la información de envio y vuelva a intentar.");
+                return $texto  = Mage::helper('andreani')->__("Error en la conexión con Andreani. Por favor chequee los datos ingresados en la información de envio y vuelva a intentar.");
             } else {
                 if($metodo != 'basico'){
                     $texto  = Mage::getStoreConfig('carriers/andreanisucursal/description',Mage::app()->getStore()) . " {$sucursales->Descripcion} ({$sucursales->Direccion}). Estas a {$this->distancia_final_txt} {$this->mode} ({$this->duracion_final}).";
