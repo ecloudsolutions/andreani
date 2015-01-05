@@ -112,12 +112,12 @@
 				</args>
 			</adminhtml>
 			<andreani>
-                <use>admin</use>
-                <args>
-                    <module>Ecloud_Andreani</module>
-                    <frontName>andreani</frontName>
-                </args>
-            </andreani>
+				<use>admin</use>
+				<args>
+					<module>Ecloud_Andreani</module>
+					<frontName>andreani</frontName>
+				</args>
+			</andreani>
 		</routers>
 		<fieldsets>
 			<customer_dataflow>
@@ -153,15 +153,19 @@
 				</all>
 				<admin>
 					<children>
-						<andreani translate="title" module="andreani">
-							<title>Andreani</title>
-							<sort_order>1000</sort_order>
+						<sales>
 							<children>
-								<pedidos translate="title" module="andreani">
+								<andreani translate="title" module="andreani">
 									<title>Andreani</title>
-								</pedidos>
+									<sort_order>1000</sort_order>
+									<children>
+										<pedidos translate="title">
+											<title>Andreani</title>
+										</pedidos>
+									</children>
+								</andreani>
 							</children>
-						</andreani>
+						</sales>
 					</children>
 				</admin>
 			</resources>
@@ -174,15 +178,15 @@
 			</updates>
 		</layout>
 		<events>
-	        <core_block_abstract_prepare_layout_before>
-	            <observers>
-	                <andreani_core_block_abstract_prepare_layout_before>
-	                    <class>andreani/observer</class>
-	                    <method>addMassAction</method>
-	                </andreani_core_block_abstract_prepare_layout_before>
-	            </observers>
-	        </core_block_abstract_prepare_layout_before>
-	    </events>
+			<core_block_abstract_prepare_layout_before>
+				<observers>
+					<andreani_core_block_abstract_prepare_layout_before>
+						<class>andreani/observer</class>
+						<method>addMassAction</method>
+					</andreani_core_block_abstract_prepare_layout_before>
+				</observers>
+			</core_block_abstract_prepare_layout_before>
+		</events>
 	</adminhtml>
    	<default>
 		<carriers>
