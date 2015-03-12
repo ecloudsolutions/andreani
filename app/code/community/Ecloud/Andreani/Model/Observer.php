@@ -196,6 +196,7 @@ class Ecloud_Andreani_Model_Observer extends Mage_Core_Model_Session_Abstract {
 
 		} catch (SoapFault $e) {
 			Mage::log("Error: " . $e);
+			Mage::throwException(Mage::helper('andreani')->__('Algo ha ido mal con la conexión a Andreani, envío no generado. Intente nuevamente.'));
 		}
 
 	}
