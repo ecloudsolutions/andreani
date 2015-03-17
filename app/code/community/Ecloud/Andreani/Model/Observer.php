@@ -178,25 +178,15 @@ class Ecloud_Andreani_Model_Observer extends Mage_Core_Model_Session_Abstract {
 			    ->setTitle('Andreani');
 			$shipment->addTrack($track);
 			
-			//Enviamos numero Andreani, nos devolvera el url de la constancia que lo almacenaremos en la tabla andreani_order.
-			$NroAndreani = $phpresponse->ConfirmarCompraResult->NumeroAndreani;
-			$constanciaResponse = $client->ImprimirConstancia(array(
-					'entities' =>array(
-								'ParamImprimirConstancia' =>array(
-										'NumeroAndreani' => $NroAndreani
-									))));
-			$ConstanciaURL = $constanciaResponse->ImprimirConstanciaResult->ResultadoImprimirConstancia->PdfLinkFile;
-			Mage::log("Constancia de entrega URL " . print_r($ConstanciaURL,true));
-
 			$id = intval($datos["id"]);
 			Mage::getModel('andreani/order')->load($id)->setData('cod_tracking',$phpresponse->ConfirmarCompraResult->NumeroAndreani)->save();
 			Mage::getModel('andreani/order')->load($id)->setData('recibo_tracking',$phpresponse->ConfirmarCompraResult->Recibo)->save();
 			Mage::getModel('andreani/order')->load($id)->setData('estado','Enviado')->save();
-			Mage::getModel('andreani/order')->load($id)->setData('constancia',$ConstanciaURL)->save();
 
 		} catch (SoapFault $e) {
 			Mage::log("Error: " . $e);
-			Mage::throwException(Mage::helper('andreani')->__('Algo ha ido mal con la conexión a Andreani, envío no generado. Intente nuevamente.'));
+			Mage::throwException(Mage::helper('andreani')->__('Algo ha ido mal con la conexión a Andreani. Intente nuevamente. (envío no generado).'));
+
 		}
 
 	}
