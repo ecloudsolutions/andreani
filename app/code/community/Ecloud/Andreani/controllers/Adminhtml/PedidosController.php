@@ -245,10 +245,8 @@ class Ecloud_Andreani_Adminhtml_PedidosController extends Mage_Adminhtml_Control
 
 		} catch (SoapFault $e) {
 			Mage::log("Error: " . $e);
-			Mage::getSingleton('adminhtml/session')->addError($e);
-			$this->_redirect('*/*/index');
-
-			
+			Mage::getSingleton('adminhtml/session')->addError('Error Andreani: '.$e->getMessage().' - Por favor vuelva a intentar en unos minutos.');
+			$this->_redirect('*/*/index');			
 		}
 
 	}
