@@ -1,8 +1,8 @@
 <?php
 /**
- * @version   0.1.11 09.10.2014
+ * @version   0.1.12 19.03.2015
  * @author    ecloud solutions http://www.ecloudsolutions.com <info@ecloudsolutions.com>
- * @copyright Copyright (C) 2010 - 2014 ecloud solutions ®
+ * @copyright Copyright (C) 2010 - 2015 ecloud solutions ®
  */
 ?><?php
 class Ecloud_Andreani_Model_Resource_Order_Collection extends Mage_Core_Model_Mysql4_Collection_Abstract
