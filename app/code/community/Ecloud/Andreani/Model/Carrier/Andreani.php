@@ -392,6 +392,9 @@
                 $wsse_header = new WsseAuthHeader($params["username"], $params["password"]);
                 $client = new SoapClient($params["urlCotizar"], $options);
                 $client->__setSoapHeaders(array($wsse_header));
+
+                $sucursalRetiro     = array('sucursalRetiro' => "");
+                $params = array_merge($sucursalRetiro, $params);
                 
                 $phpresponse = $client->CotizarEnvio(array(
                     'cotizacionEnvio' =>array(
