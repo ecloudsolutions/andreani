@@ -219,7 +219,6 @@
 
             if($request->getFreeShipping() == true || $request->getPackageQty() == $this->getFreeBoxes()) {
                 $shippingPrice = '0.00';
-                // cambiamos el titulo para indicar que el envio es gratis
                 $rate->setMethodTitle(Mage::helper('andreani')->__('Envío gratis.'));
             } else { 
                 $shippingPrice = $this->getFinalPriceWithHandlingFee($datos["precio"]);

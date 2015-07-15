@@ -23,12 +23,13 @@ class Ecloud_Andreani_Model_Observer extends Mage_Core_Model_Session_Abstract {
 			$metodoenvio = $observer->getEvent()->getOrder()->getShippingMethod();
 			if($metodoenvio == 'andreaniestandar_andreaniestandar'){
 				$datos 		= Mage::getSingleton('core/session')->getAndreaniEstandar();
-			}
-			if($metodoenvio == 'andreaniurgente_andreaniurgente'){
+			}elseif($metodoenvio == 'andreaniurgente_andreaniurgente'){
 				$datos 		= Mage::getSingleton('core/session')->getAndreaniUrgente();
-			}
-			if($metodoenvio == 'andreanisucursal_andreanisucursal'){
+			}elseif($metodoenvio == 'andreanisucursal_andreanisucursal'){
 				$datos 		= Mage::getSingleton('core/session')->getAndreaniSucursal();
+			}else{
+				// No es envio con Andreani
+				return;
 			}
 
 
