@@ -93,14 +93,15 @@ class Ecloud_Andreani_Model_Observer extends Mage_Core_Model_Session_Abstract {
         	->addFieldToFilter('id_orden', $OrderId);
         $collection->getSelect()->limit(1);
 
-        if (!$collection) {
-        	Mage::log("Andreani :: no existe la orden en la tabla andreani_order.");
-        	return;
-        }
-
+        $datos = null;
         foreach($collection as $thing) {
 		    $datos = $thing->getData();
 		}
+
+        if (!$datos) {
+        	// No esta en la tabla andreani_order
+        	return;
+        }
 
 		if (Mage::getStoreConfig('carriers/andreaniconfig/testmode',Mage::app()->getStore()) == 1) {
                 $datos["urlConfirmar"]  = "https://www.e-andreani.com/CASAStaging/eCommerce/ImposicionRemota.svc?wsdl";
