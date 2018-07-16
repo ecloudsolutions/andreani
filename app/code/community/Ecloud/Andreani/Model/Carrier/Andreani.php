@@ -195,11 +195,11 @@
             $datos["contrato"]      = Mage::getStoreConfig('carriers/andreaniestandar/contrato',Mage::app()->getStore());
 
             if (Mage::getStoreConfig('carriers/andreaniconfig/testmode',Mage::app()->getStore()) == 1) {
-                $datos["urlCotizar"]        = 'https://www.e-andreani.com/CasaStaging/eCommerce/CotizacionEnvio.svc?wsdl';
-                $datos["urlSucursal"]       = 'https://www.e-andreani.com/CasaStaging/ecommerce/ConsultaSucursales.svc?wsdl';
+                $datos["urlCotizar"]        = 'https://cotizadorpreprod.andreani.com/ws?wsdl';
+                $datos["urlSucursal"]       = 'https://sucursalespreprod.andreani.com/ws?wsdl';
             } else {
-                $datos["urlCotizar"]        = 'https://www.e-andreani.com/CASAWS/eCommerce/CotizacionEnvio.svc?wsdl';
-                $datos["urlSucursal"]       = 'https://www.e-andreani.com/CASAWS/ecommerce/ConsultaSucursales.svc?wsdl';
+                $datos["urlCotizar"]        = 'https://cotizador.andreani.com/ws?wsdl';
+                $datos["urlSucursal"]       = 'https://sucursales.andreani.com/ws?wsdl';
             }
 
             // Buscamos en eAndreani el costo del envio segun los parametros enviados
@@ -250,11 +250,11 @@
             $datos["contrato"]      = Mage::getStoreConfig('carriers/andreaniurgente/contrato',Mage::app()->getStore());
 
             if (Mage::getStoreConfig('carriers/andreaniconfig/testmode',Mage::app()->getStore()) == 1) {
-                $datos["urlCotizar"]        = 'https://www.e-andreani.com/CasaStaging/eCommerce/CotizacionEnvio.svc?wsdl';
-                $datos["urlSucursal"]       = 'https://www.e-andreani.com/CasaStaging/ecommerce/ConsultaSucursales.svc?wsdl';
+                $datos["urlCotizar"]        = 'https://cotizadorpreprod.andreani.com/ws?wsdl';
+                $datos["urlSucursal"]       = 'https://sucursalespreprod.andreani.com/ws?wsdl';
             } else {
-                $datos["urlCotizar"]        = 'https://www.e-andreani.com/CASAWS/eCommerce/CotizacionEnvio.svc?wsdl';
-                $datos["urlSucursal"]       = 'https://www.e-andreani.com/CASAWS/ecommerce/ConsultaSucursales.svc?wsdl';
+                $datos["urlCotizar"]        = 'https://cotizador.andreani.com/ws?wsdl';
+                $datos["urlSucursal"]       = 'https://sucursales.andreani.com/ws?wsdl';
             }
 
             // Buscamos en eAndreani el costo del envio segun los parametros enviados
@@ -307,11 +307,11 @@
             $datos["contrato"]      = Mage::getStoreConfig('carriers/andreanisucursal/contrato',Mage::app()->getStore());
 
             if (Mage::getStoreConfig('carriers/andreaniconfig/testmode',Mage::app()->getStore()) == 1) {
-                    $datos["urlCotizar"]        = 'https://www.e-andreani.com/CasaStaging/eCommerce/CotizacionEnvio.svc?wsdl';
-                    $datos["urlSucursal"]       = 'https://www.e-andreani.com/CasaStaging/ecommerce/ConsultaSucursales.svc?wsdl';
+                    $datos["urlCotizar"]        = 'https://cotizadorpreprod.andreani.com/ws?wsdl';
+                    $datos["urlSucursal"]       = 'https://sucursalespreprod.andreani.com/ws?wsdl';
             } else {
-                    $datos["urlCotizar"]        = 'https://www.e-andreani.com/CASAWS/eCommerce/CotizacionEnvio.svc?wsdl';
-                    $datos["urlSucursal"]       = 'https://www.e-andreani.com/CASAWS/ecommerce/ConsultaSucursales.svc?wsdl';
+                    $datos["urlCotizar"]        = 'https://cotizador.andreani.com/ws?wsdl';
+                    $datos["urlSucursal"]       = 'https://sucursales.andreani.com/ws?wsdl';
             }
 
             // Buscamos la sucursal mas cercana del cliente segun el CP ingresado
